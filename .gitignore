@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+
+# Environment (contains contract addresses and wallet info)
+.env
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+build_log*.txt
+
+# Contract build artifacts & deploy logs
+contracts/build/
+contracts/node_modules/
+contracts/deployed.json
+contracts/build_log*.txt
+contracts/deploy_error.log
+contracts/deploy_success.log
+contracts/debug-*.js
+
+# Local dev utilities
+analyze_skills.js
+skills/
+
+# Claude / Editor settings
+.claude/
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

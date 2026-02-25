@@ -1,0 +1,23 @@
+{
+    "targets": {
+        "release": {
+            "sourceMap": false,
+            "optimizeLevel": 3,
+            "shrinkLevel": 1,
+            "converge": true,
+            "noAssert": false,
+            "uncheckedBehavior": "never"
+        },
+        "debug": {
+            "sourceMap": true,
+            "debug": true,
+            "uncheckedBehavior": "never"
+        }
+    },
+    "options": {
+        "bindings": "esm",
+        "runtime": "stub",
+        "exportStart": "start",
+        "transform": "@btc-vision/opnet-transform"
+    }
+}

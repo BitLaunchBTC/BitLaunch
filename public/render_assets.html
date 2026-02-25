@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Assets</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #222;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            padding: 40px;
+        }
+
+        .asset-block {
+            background: #000;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            background: #ff6b00;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #ff8533;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #ccc;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>BitLaunch Asset Downloader V2 (Fix)</h1>
+    <p>Converted to Pure SVG for 100% Download Compatibility.</p>
+
+    <!-- 1. PROFILE SVG -->
+    <div class="asset-block">
+        <h2>1. Profile Picture (400x400)</h2>
+        <svg id="profile-svg" width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="g21" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ff6b00" />
+                    <stop offset="100%" style="stop-color:#9945ff" />
+                </linearGradient>
+            </defs>
+            <rect width="400" height="400" fill="#0a0a0f" />
+            <g transform="translate(72, 72) scale(0.5)">
+                <g transform="rotate(45, 256, 256)">
+                    <path
+                        d="M256,64 C256,64 384,200 384,320 C384,400 350,448 350,448 C350,448 320,350 256,350 C192,350 162,448 162,448 C162,448 128,400 128,320 C128,200 256,64 256,64 Z"
+                        fill="url(#g21)" />
+                    <circle cx="256" cy="200" r="40" fill="#ffffff" />
+                    <path
+                        d="M256,380 C256,380 290,420 290,460 C290,490 256,512 256,512 C256,512 222,490 222,460 C222,420 256,380 256,380 Z"
+                        fill="url(#g21)" />
+                </g>
+            </g>
+        </svg>
+        <br>
+        <button onclick="downloadSvgAsPng('profile-svg', 'profile.png')">Download PNG ⬇️</button>
+    </div>
+
+    <!-- 2. BANNER SVG (Pure SVG Replacement) -->
+    <div class="asset-block">
+        <h2>2. Twitter Banner (1500x500)</h2>
+        <svg id="banner-svg" width="1500" height="500" viewBox="0 0 1500 500" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#0d0d14" />
+                    <stop offset="100%" style="stop-color:#1a1a24" />
+                </linearGradient>
+                <radialGradient id="meshGrad1" cx="10%" cy="20%" r="50%">
+                    <stop offset="0%" style="stop-color:rgba(255, 107, 0, 0.1)" />
+                    <stop offset="100%" style="stop-color:rgba(255, 107, 0, 0)" />
+                </radialGradient>
+                <radialGradient id="meshGrad2" cx="90%" cy="80%" r="50%">
+                    <stop offset="0%" style="stop-color:rgba(153, 69, 255, 0.1)" />
+                    <stop offset="100%" style="stop-color:rgba(153, 69, 255, 0)" />
+                </radialGradient>
+                <linearGradient id="logoGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ff6b00" />
+                    <stop offset="100%" style="stop-color:#9945ff" />
+                </linearGradient>
+                <filter id="shadow">
+                    <feDropShadow dx="0" dy="0" stdDeviation="15" flood-color="rgba(255, 107, 0, 0.3)" />
+                </filter>
+            </defs>
+
+            <!-- Background -->
+            <rect width="1500" height="500" fill="url(#bgGrad)" />
+            <rect width="1500" height="500" fill="url(#meshGrad1)" />
+            <rect width="1500" height="500" fill="url(#meshGrad2)" />
+
+            <!-- Text Content (Left Aligned) - x=100 -->
+            <text x="100" y="280" font-family="'Inter', sans-serif" font-weight="900" font-size="80" fill="white"
+                letter-spacing="-2">BITLAUNCH</text>
+            <text x="100" y="340" font-family="'Inter', sans-serif" font-weight="400" font-size="28" fill="#ccc"
+                letter-spacing="4">THE PREMIER OP_NET LAUNCHPAD</text>
+
+            <!-- Logo (Right Aligned) - x=1100 -->
+            <g transform="translate(1100, 100) scale(0.6)" filter="url(#shadow)" opacity="0.9">
+                <g transform="rotate(45, 256, 256)">
+                    <path
+                        d="M256,64 C256,64 384,200 384,320 C384,400 350,448 350,448 C350,448 320,350 256,350 C192,350 162,448 162,448 C162,448 128,400 128,320 C128,200 256,64 256,64 Z"
+                        fill="url(#logoGrad2)" />
+                    <circle cx="256" cy="200" r="40" fill="#ffffff" />
+                    <path
+                        d="M256,380 C256,380 290,420 290,460 C290,490 256,512 256,512 C256,512 222,490 222,460 C222,420 256,380 256,380 Z"
+                        fill="url(#logoGrad2)" />
+                </g>
+            </g>
+        </svg>
+        <br>
+        <button onclick="downloadSvgAsPng('banner-svg', 'twitter_banner.png')">Download PNG ⬇️</button>
+    </div>
+
+    <!-- 3. POST SVG (Pure SVG Replacement) -->
+    <div class="asset-block">
+        <h2>3. Launch Post (1600x900)</h2>
+        <svg id="post-svg" width="1600" height="900" viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="postBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#111" />
+                    <stop offset="100%" style="stop-color:#1a1a20" />
+                </linearGradient>
+                <radialGradient id="meshPost" cx="50%" cy="50%" r="70%">
+                    <stop offset="0%" style="stop-color:rgba(255, 107, 0, 0.1)" />
+                    <stop offset="100%" style="stop-color:rgba(0,0,0,0)" />
+                </radialGradient>
+            </defs>
+
+            <!-- Background -->
+            <rect width="1600" height="900" fill="url(#postBg)" />
+            <rect width="1600" height="900" fill="url(#meshPost)" />
+
+            <!-- Centered Text -->
+            <text x="800" y="380" text-anchor="middle" font-family="'Inter', sans-serif" font-weight="900"
+                font-size="120" fill="white">DEPLOY NOW</text>
+            <text x="800" y="480" text-anchor="middle" font-family="'Inter', sans-serif" font-weight="600"
+                font-size="50" fill="#9945ff" letter-spacing="5">ON BITCOIN LAYER 1</text>
+
+            <!-- Button Shape -->
+            <rect x="650" y="580" width="300" height="90" rx="45" fill="white" />
+            <text x="800" y="640" text-anchor="middle" font-family="'Inter', sans-serif" font-weight="800"
+                font-size="40" fill="black">START ➜</text>
+
+        </svg>
+        <br>
+        <button onclick="downloadSvgAsPng('post-svg', 'launch_post.png')">Download PNG ⬇️</button>
+    </div>
+
+    <script>
+        function downloadSvgAsPng(svgId, filename) {
+            const svg = document.getElementById(svgId);
+            const w = parseInt(svg.getAttribute('width'));
+            const h = parseInt(svg.getAttribute('height'));
+
+            // Serialize SVG XML
+            const data = (new XMLSerializer()).serializeToString(svg);
+
+            // Prepare Canvas
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            // Convert to Blob URL
+            const svgBlob = new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+
+            canvas.width = w;
+            canvas.height = h;
+
+            img.onload = function () {
+                ctx.clearRect(0, 0, w, h);
+                ctx.drawImage(img, 0, 0, w, h);
+                URL.revokeObjectURL(url);
+
+                try {
+                    // Convert to PNG Data URL
+                    const imgURI = canvas.toDataURL('image/png');
+
+                    // Trigger Download
+                    const a = document.createElement('a');
+                    a.download = filename;
+                    a.href = imgURI;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                } catch (e) {
+                    alert('Error saving image: ' + e.message);
+                }
+            };
+
+            img.onerror = function () {
+                alert('Error loading SVG for render');
+            };
+
+            img.src = url;
+        }
+    </script>
+</body>
+
+</html>

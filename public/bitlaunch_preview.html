@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BitLaunch: The Complete Toolkit</title>
+
+    <!-- FONTS -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- ICONS -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* 1. BITLAUNCH THEME (Fintech Structure + Brand Colors) */
+        :root {
+            /* DEEP SPACE BACKGROUNDS (From Reference) */
+            --surface-base: #0c0f14;
+            --surface-raised: #141820;
+            --surface-overlay: #1c2028;
+            --surface-interactive: #242830;
+
+            /* BRAND ACCENTS (Our Identity) */
+            --accent-primary: #ff6b00;
+            /* BitLaunch Orange */
+            --accent-secondary: #9945ff;
+            /* Deep Purple */
+            --accent-gradient: linear-gradient(135deg, #ff6b00 0%, #9945ff 100%);
+
+            /* GLOWS */
+            --accent-glow: rgba(255, 107, 0, 0.15);
+            /* Orange Glow */
+            --accent-glow-purple: rgba(153, 69, 255, 0.15);
+            /* Purple Glow */
+
+            /* TEXT */
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+
+            /* UTILS */
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-interactive: rgba(255, 255, 255, 0.12);
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+
+            /* FONTS */
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Poppins', sans-serif;
+
+            /* SHADOWS (Clean Fintech Style) */
+            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.2);
+            --shadow-glow: 0 0 20px rgba(255, 107, 0, 0.2);
+
+            /* ANIMATION */
+            --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* 2. BASE STYLES */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--surface-base);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: var(--font-display);
+            margin-top: 0;
+            line-height: 1.2;
+        }
+
+        /* 3. ANIMATIONS (Fade Up Reference) */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-up {
+            animation: fadeUp 0.8s var(--ease-out) both;
+        }
+
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.3s;
+        }
+
+        /* 4. NAVBAR (Glassmorphism) */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 60px;
+            background: rgba(12, 15, 20, 0.85);
+            /* Dark Blur */
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo svg {
+            filter: drop-shadow(0 0 10px rgba(255, 107, 0, 0.5));
+        }
+
+        .btn-connect {
+            background: var(--surface-interactive);
+            border: 1px solid var(--border-interactive);
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-connect:hover {
+            border-color: var(--accent-primary);
+            background: rgba(255, 107, 0, 0.1);
+        }
+
+        /* 5. HERO SECTION */
+        .hero {
+            text-align: center;
+            padding: 120px 20px 80px;
+            position: relative;
+            /* Stronger Brand Atmosphere */
+            background:
+                radial-gradient(circle at 20% 30%, rgba(255, 107, 0, 0.08), transparent 50%),
+                radial-gradient(circle at 80% 60%, rgba(153, 69, 255, 0.08), transparent 50%);
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+            /* Gradient Text: Orange to Purple */
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px rgba(255, 107, 0, 0.2));
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            font-weight: 300;
+        }
+
+        .cta-btn {
+            background: var(--accent-gradient);
+            color: white;
+            padding: 16px 48px;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(255, 107, 0, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(153, 69, 255, 0.5);
+        }
+
+        /* 6. STATS BAR (Clean Structure) */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            padding: 40px 0;
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+            background: var(--surface-raised);
+            margin-bottom: 100px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-val {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 8px;
+        }
+
+        /* 7. FEATURE CARDS (Hybrid Style) */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            max-width: 1200px;
+            margin: 0 auto 100px;
+            padding: 0 40px;
+        }
+
+        .card {
+            background: var(--surface-raised);
+            border: 1px solid var(--border-subtle);
+            padding: 40px;
+            border-radius: var(--radius-xl);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-interactive);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Top Border Accent instead of full border */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent-gradient);
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .icon-box {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar animate-fade-up">
+        <div class="logo">
+            <!-- INLINE LOGO SVG -->
+            <svg viewBox="0 0 512 512" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="gnav" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#ff6b00" />
+                        <stop offset="100%" style="stop-color:#9945ff" />
+                    </linearGradient>
+                </defs>
+                <g transform="rotate(45, 256, 256)">
+                    <path
+                        d="M256,64 C256,64 384,200 384,320 C384,400 350,448 350,448 C350,448 320,350 256,350 C192,350 162,448 162,448 C162,448 128,400 128,320 C128,200 256,64 256,64 Z"
+                        fill="url(#gnav)" />
+                    <circle cx="256" cy="200" r="40" fill="#ffffff" />
+                    <path
+                        d="M256,380 C256,380 290,420 290,460 C290,490 256,512 256,512 C256,512 222,490 222,460 C222,420 256,380 256,380 Z"
+                        fill="url(#gnav)" />
+                </g>
+            </svg>
+            BitLaunch
+        </div>
+        <button class="btn-connect">Connect Wallet</button>
+    </nav>
+
+    <div class="hero">
+        <div class="animate-fade-up delay-1">
+            <span
+                style="font-size: 0.85rem; color: var(--accent-secondary); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; border: 1px solid rgba(153,69,255,0.3); padding: 6px 16px; border-radius: 50px; background: rgba(153,69,255,0.05);">
+                Live on Bitcoin L1
+            </span>
+            <h1 style="margin-top: 24px">Building the Future<br>of Bitcoin DeFi</h1>
+        </div>
+
+        <p class="animate-fade-up delay-2">
+            The comprehensive toolkit for OP_NET development. Deploy tokens, lock liquidity, and launch fair presales in
+            seconds. No code required.
+        </p>
+
+        <div class="animate-fade-up delay-3" style="display: flex; gap: 16px; justify-content: center;">
+            <button class="cta-btn">Launch App 🚀</button>
+            <button class="cta-btn"
+                style="background: transparent; border: 1px solid var(--border-interactive); box-shadow: none;">Read
+                Docs</button>
+        </div>
+    </div>
+
+    <div class="stats-bar animate-fade-up delay-3">
+        <div class="stat-item">
+            <div class="stat-val">0%</div>
+            <div class="stat-label">Fee on Day 1</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-val">100%</div>
+            <div class="stat-label">Fair Launch</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-val">Instant</div>
+            <div class="stat-label">Deployment</div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="card animate-fade-up delay-1">
+            <div class="icon-box"><i data-lucide="zap"></i></div>
+            <h3>Token Creator</h3>
+            <p>Deploy OP20 tokens instantly. Customize supply, decimals, and metadata with a simple form.</p>
+        </div>
+        <div class="card animate-fade-up delay-2">
+            <div class="icon-box" style="color: var(--accent-secondary)"><i data-lucide="lock"></i></div>
+            <h3>Liquidity Locker</h3>
+            <p>Prove your project is safe. Lock LP tokens for a set duration to build community trust.</p>
+        </div>
+        <div class="card animate-fade-up delay-3">
+            <div class="icon-box"><i data-lucide="rocket"></i></div>
+            <h3>Fair Presales</h3>
+            <p>Raise funds transparently. Set hard caps, whitelists, and vesting schedules automatically.</p>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

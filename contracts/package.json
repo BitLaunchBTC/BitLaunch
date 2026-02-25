@@ -1,0 +1,37 @@
+{
+    "name": "@bitlaunch/contracts",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "deploy": "node deploy.js",
+        "build:token": "asc src/token/index.ts --target release --outFile build/OP20.wasm --textFile build/OP20.wat --use abort=src/token/index/abort",
+        "build:template": "asc src/template/index.ts --target release --outFile build/OP20Template.wasm --textFile build/OP20Template.wat --use abort=src/template/index/abort",
+        "build:factory": "asc src/factory/index.ts --target release --outFile build/Factory.wasm --textFile build/Factory.wat --use abort=src/factory/index/abort",
+        "build:presale": "asc src/presale/index.ts --target release --outFile build/Presale.wasm --textFile build/Presale.wat --use abort=src/presale/index/abort",
+        "build:vesting": "asc src/vesting/index.ts --target release --outFile build/Vesting.wasm --textFile build/Vesting.wat --use abort=src/vesting/index/abort",
+        "build:lock": "asc src/lock/index.ts --target release --outFile build/LiquidityLock.wasm --textFile build/LiquidityLock.wat --use abort=src/lock/index/abort",
+        "build:presale-factory": "asc src/presale-factory/index.ts --target release --outFile build/PresaleFactory.wasm --textFile build/PresaleFactory.wat --use abort=src/presale-factory/index/abort",
+        "build:airdrop": "asc src/airdrop/index.ts --target release --outFile build/Airdrop.wasm --textFile build/Airdrop.wat --use abort=src/airdrop/index/abort",
+        "build:all": "npm run build:token && npm run build:template && npm run build:factory && npm run build:presale && npm run build:presale-factory && npm run build:vesting && npm run build:lock && npm run build:airdrop",
+        "build:debug:token": "asc src/token/index.ts --target debug --outFile build/OP20.wasm --textFile build/OP20.wat --use abort=src/token/index/abort",
+        "deploy:contracts": "node deploy-contracts.js --network regtest",
+        "deploy:factory": "node deploy-contracts.js --network regtest --contract factory",
+        "deploy:presale": "node deploy-contracts.js --network regtest --contract presale",
+        "deploy:presale-factory": "node deploy-contracts.js --network regtest --contract presaleFactory",
+        "deploy:vesting": "node deploy-contracts.js --network regtest --contract vesting",
+        "deploy:lock": "node deploy-contracts.js --network regtest --contract lock",
+        "deploy:airdrop": "node deploy-contracts.js --network regtest --contract airdrop"
+    },
+    "dependencies": {
+        "@assemblyscript/loader": "^0.28.9",
+        "@btc-vision/assemblyscript": "^0.29.2",
+        "@btc-vision/bitcoin": "^7.0.0-rc.5",
+        "@btc-vision/transaction": "^1.8.0-rc.7",
+        "opnet": "^1.8.1-rc.9"
+    },
+    "devDependencies": {
+        "@btc-vision/as-bignum": "^0.1.2",
+        "@btc-vision/btc-runtime": "^1.11.0-rc.9",
+        "@btc-vision/opnet-transform": "^1.2.0"
+    }
+}

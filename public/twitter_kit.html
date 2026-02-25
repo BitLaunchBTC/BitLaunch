@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BitLaunch - Twitter X Kit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --twitter-bg: #000000;
+            --twitter-gray: #71767b;
+            --accent-orange: #ff6b00;
+            --accent-purple: #9945ff;
+        }
+
+        body {
+            background-color: #111;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            gap: 60px;
+        }
+
+        h1 {
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            /* Twitter Mobile width approx */
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        /* TWITTER MOCKUP */
+        .twitter-mockup {
+            background-color: var(--twitter-bg);
+            border: 1px solid #333;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 1. HEADER IMAGE (1500x500 -> Scaled) */
+        .header-area {
+            width: 100%;
+            height: 200px;
+            /* Aspect Ratio approx 3:1 */
+            background: radial-gradient(circle at 80% 90%, #1a0b2e 0%, #000 70%);
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid #333;
+        }
+
+        .header-mesh {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(#222 1px, transparent 1px), linear-gradient(90deg, #222 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.3;
+        }
+
+        .header-tagline {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            text-align: right;
+        }
+
+        .ht-1 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .ht-2 {
+            font-size: 0.8rem;
+            color: var(--accent-orange);
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        /* 2. PROFILE PICTURE */
+        .profile-pic-container {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: #000;
+            border: 4px solid #000;
+            position: absolute;
+            top: 135px;
+            /* Overlaps header */
+            left: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            padding: 15px;
+            box-sizing: border-box;
+            background: #0a0a0f;
+        }
+
+        /* PROFILE INFO */
+        .profile-info {
+            margin-top: 70px;
+            padding: 0 16px 20px 16px;
+        }
+
+        .x-name {
+            font-weight: 900;
+            font-size: 1.3rem;
+        }
+
+        .x-handle {
+            color: var(--twitter-gray);
+            font-size: 0.95rem;
+            margin-top: 2px;
+        }
+
+        .x-bio {
+            margin-top: 12px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: #e7e9ea;
+        }
+
+        .x-bio a {
+            color: var(--accent-orange);
+            text-decoration: none;
+        }
+
+        .x-stats {
+            margin-top: 12px;
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: var(--twitter-gray);
+        }
+
+        .x-stats span {
+            color: white;
+            font-weight: 700;
+        }
+
+        .edit-btn {
+            float: right;
+            border: 1px solid #536471;
+            background: transparent;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            margin-right: 16px;
+            cursor: pointer;
+        }
+
+        /* 3. PINNED POST DESIGN */
+        .post-area {
+            border-top: 1px solid #333;
+            padding: 16px;
+        }
+
+        .pinned {
+            color: var(--twitter-gray);
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .post-image {
+            margin-top: 10px;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: linear-gradient(135deg, #111, #1a1a20);
+            border-radius: 16px;
+            border: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Post Content: Launch */
+        .launch-content {
+            text-align: center;
+            z-index: 2;
+        }
+
+        .launch-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: white;
+        }
+
+        .launch-sub {
+            color: var(--accent-purple);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .launch-btn {
+            background: white;
+            color: black;
+            padding: 8px 20px;
+            border-radius: 99px;
+            font-weight: 800;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        /* ASSET DOWNLOADS */
+        .download-zone {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .asset-card {
+            flex: 1;
+            min-width: 250px;
+            background: #222;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .asset-title {
+            color: #ccc;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .asset-box {
+            width: 100%;
+            height: 100px;
+            background: #000;
+            border: 1px dashed #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>BitLaunch X (Twitter) Kit</h1>
+
+    <div class="container">
+        <!-- Live Mockup -->
+        <div class="twitter-mockup">
+
+            <!-- Header -->
+            <div class="header-area">
+                <div class="header-mesh"></div>
+                <div class="header-tagline">
+                    <div class="ht-1">BitLaunch</div>
+                    <div class="ht-2">OP_NET PROTOCOL</div>
+                </div>
+            </div>
+
+            <!-- Profile Pic -->
+            <div class="profile-pic-container">
+                <img src="logo.svg" class="profile-img">
+            </div>
+
+            <button class="edit-btn">Edit profile</button>
+
+            <!-- Info -->
+            <div class="profile-info">
+                <div class="x-name">BitLaunch</div>
+                <div class="x-handle">@BitLaunch_BTC</div>
+                <div class="x-bio">
+                    The premier decentralized token launchpad on Bitcoin (OP_NET). 🟧<br>
+                    Secure. Permissionless. Fast.<br>
+                    <a href="#">http://bitlaunch.io</a>
+                </div>
+                <div class="x-stats">
+                    <div><span>122</span> Following</div>
+                    <div><span>4.2K</span> Followers</div>
+                </div>
+            </div>
+
+            <!-- Pinned Post -->
+            <div class="post-area">
+                <div class="pinned">📌 Pinned</div>
+                <div class="x-name" style="font-size: 1rem;">BitLaunch <span
+                        style="color:#71767b; font-weight:400">@BitLaunch_BTC · 2h</span></div>
+                <div class="x-bio" style="margin-top:5px; font-size:1rem;">
+                    We are live! 🚀<br>
+                    Deploy your own Bitcoin tokens in under 60 seconds with BitLaunch. No code required.
+                </div>
+
+                <!-- Post Image Asset -->
+                <div class="post-image">
+                    <div
+                        style="position:absolute; width:150%; height:150%; background:radial-gradient(circle, rgba(255,107,0,0.15) 0%, transparent 60%);">
+                    </div>
+                    <div class="launch-content">
+                        <div class="launch-title">DEPLOY NOW</div>
+                        <div class="launch-sub">ON BITCOIN LAYER 1</div>
+                        <div class="launch-btn">START ➜</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Download Instructions -->
+    <div style="text-align: center; color: #888; max-width: 500px;">
+        <h3>How to use:</h3>
+        <p>1. <b>Header:</b> Screenshot the top banner area (Aspect Ratio 3:1). Works perfectly on X.</p>
+        <p>2. <b>Profile Pic:</b> Use the "logo.svg" file directly. Twitter handles circular cropping automatically.</p>
+        <p>3. <b>Pinned Post:</b> Screenshot the "Post Image" area for your first announcement.</p>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BitLaunch Feature Grid</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0F0F0F;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .post-container {
+            width: 1200px;
+            height: 675px;
+            /* 16:9 Twitter Aspect Ratio */
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+
+        /* Background Effects */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(255, 115, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 115, 0, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 1;
+        }
+
+        .glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 115, 0, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+
+        /* Content */
+        .content {
+            z-index: 10;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            width: 80%;
+            margin-top: 40px;
+        }
+
+        .header {
+            z-index: 10;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 48px;
+            margin: 0;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #FF9500, #FF5E00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #888;
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #FF9500;
+            background: rgba(255, 149, 0, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .feature-title {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            color: #aaa;
+            line-height: 1.4;
+        }
+
+        /* Footer */
+        .footer {
+            z-index: 10;
+            margin-top: 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            color: #555;
+            letter-spacing: 3px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="post-container">
+        <div class="grid-bg"></div>
+        <div class="glow"></div>
+
+        <div class="header">
+            <h1>BitLaunch</h1>
+            <div class="subtitle">THE COMPLETE ECOSYSTEM</div>
+        </div>
+
+        <div class="content">
+            <!-- Card 1 -->
+            <div class="feature-card">
+                <div class="icon">🟧</div>
+                <div class="feature-title">Token Creator</div>
+                <div class="feature-desc">Deploy No-Code OP20 Assets</div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="feature-card">
+                <div class="icon">⚖️</div>
+                <div class="feature-title">Fair Launch</div>
+                <div class="feature-desc">Presales with Auto-Refunds</div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="feature-card">
+                <div class="icon">🔒</div>
+                <div class="feature-title">Vesting</div>
+                <div class="feature-desc">Automated Schedule Locks</div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="feature-card">
+                <div class="icon">💧</div>
+                <div class="feature-title">Liquidity Lock</div>
+                <div class="feature-desc">Instant Trust on MotoSwap</div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="feature-card">
+                <div class="icon">🎁</div>
+                <div class="feature-title">Airdrops</div>
+                <div class="feature-desc">Reward Your Community</div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="feature-card">
+                <div class="icon">🛡️</div>
+                <div class="feature-title">Security</div>
+                <div class="feature-desc">Powered by Bitcoin L1</div>
+            </div>
+        </div>
+
+        <div class="footer">BUILD ON BITCOIN</div>
+    </div>
+
+</body>
+
+</html>

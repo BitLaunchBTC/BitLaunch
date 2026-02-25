@@ -1,0 +1,204 @@
+/* Transaction Tracker Styles */
+
+/* Full tracker */
+.tx-tracker {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+}
+
+.tx-tracker.status-confirmed {
+    border-color: rgba(20, 241, 149, 0.3);
+    box-shadow: 0 0 20px rgba(20, 241, 149, 0.05);
+}
+
+.tx-tracker.status-mempool {
+    border-color: rgba(153, 69, 255, 0.3);
+}
+
+.tx-tracker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.tx-tracker-header h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.tx-tracker-elapsed {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+/* Pipeline */
+.tx-pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: var(--spacing-lg);
+}
+
+.tx-pipeline-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+    flex-shrink: 0;
+}
+
+.tx-pipeline-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-subtle);
+    color: var(--text-muted);
+    transition: all 0.4s ease;
+}
+
+.tx-pipeline-step.complete .tx-pipeline-icon {
+    background: rgba(20, 241, 149, 0.15);
+    border-color: var(--accent-green);
+    color: var(--accent-green);
+}
+
+.tx-pipeline-step.active .tx-pipeline-icon {
+    background: rgba(153, 69, 255, 0.15);
+    border-color: var(--accent-purple);
+    color: var(--accent-purple);
+    box-shadow: 0 0 16px rgba(153, 69, 255, 0.3);
+}
+
+.tx-pipeline-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.tx-pipeline-step.complete .tx-pipeline-label {
+    color: var(--accent-green);
+}
+
+.tx-pipeline-step.active .tx-pipeline-label {
+    color: var(--text-primary);
+}
+
+.tx-pipeline-line {
+    flex: 1;
+    height: 2px;
+    min-width: 20px;
+    background: var(--border-subtle);
+    margin: 0 var(--spacing-xs);
+    margin-bottom: 20px; /* offset for label below icon */
+    transition: background 0.4s ease;
+}
+
+.tx-pipeline-line.complete {
+    background: var(--accent-green);
+}
+
+/* Status message */
+.tx-tracker-message {
+    text-align: center;
+}
+
+.tx-tracker-message p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Compact mode */
+.tx-tracker-compact {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.tx-tracker-compact.status-broadcasting {
+    background: rgba(255, 107, 0, 0.1);
+    color: var(--accent-orange);
+    border: 1px solid rgba(255, 107, 0, 0.2);
+}
+
+.tx-tracker-compact.status-mempool {
+    background: rgba(153, 69, 255, 0.1);
+    color: var(--accent-purple);
+    border: 1px solid rgba(153, 69, 255, 0.2);
+}
+
+.tx-tracker-compact.status-confirmed {
+    background: rgba(20, 241, 149, 0.1);
+    color: var(--accent-green);
+    border: 1px solid rgba(20, 241, 149, 0.2);
+}
+
+.tx-tracker-compact.status-failed {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--accent-red);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.tx-tracker-compact .tx-tracker-elapsed {
+    opacity: 0.7;
+    margin-left: 4px;
+}
+
+/* Animations */
+.pulse-icon {
+    animation: pulseGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+.spinning {
+    animation: spin360 1s linear infinite;
+}
+
+@keyframes spin360 {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .tx-pipeline {
+        gap: 0;
+    }
+
+    .tx-pipeline-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .tx-pipeline-label {
+        font-size: 0.65rem;
+    }
+
+    .tx-pipeline-line {
+        min-width: 12px;
+    }
+}

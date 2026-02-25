@@ -1,0 +1,182 @@
+/* Token Directory Styles (V3 - Competition UI) */
+.directory-page {
+    padding-bottom: var(--spacing-3xl);
+    min-height: 100vh;
+}
+
+.directory-page .page-hero {
+    margin-bottom: 0.25rem;
+}
+
+.directory-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+}
+
+.directory-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.directory-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-xs);
+    background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.directory-header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+/* Toolbar */
+.directory-toolbar {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+    align-items: center;
+}
+
+.directory-search {
+    flex: 1;
+    position: relative;
+}
+
+.directory-search .search-icon {
+    position: absolute;
+    left: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.directory-search-input {
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg);
+    padding-left: calc(var(--spacing-md) + 28px);
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all var(--transition-normal);
+}
+
+.directory-search-input:focus {
+    border-color: var(--accent-orange);
+    box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.12), 0 0 20px rgba(255, 107, 0, 0.06);
+    outline: none;
+}
+
+/* Token Grid */
+.token-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--spacing-md);
+}
+
+/* Stagger entrance for token cards */
+.token-grid > * {
+    animation: tokenCardEnter 0.45s ease-out backwards;
+}
+.token-grid > *:nth-child(1) { animation-delay: 0.03s; }
+.token-grid > *:nth-child(2) { animation-delay: 0.07s; }
+.token-grid > *:nth-child(3) { animation-delay: 0.11s; }
+.token-grid > *:nth-child(4) { animation-delay: 0.15s; }
+.token-grid > *:nth-child(5) { animation-delay: 0.19s; }
+.token-grid > *:nth-child(6) { animation-delay: 0.23s; }
+
+@keyframes tokenCardEnter {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.token-dir-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    transition: all 0.35s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+    position: relative;
+    overflow: hidden;
+}
+
+/* Gradient top accent */
+.token-dir-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-primary, linear-gradient(135deg, #ff6b00, #ffaa33));
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.token-dir-card:hover {
+    border-color: rgba(255, 107, 0, 0.2);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    transform: translateY(-3px);
+}
+
+.token-dir-card:hover::before {
+    opacity: 1;
+}
+
+.token-dir-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.token-dir-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.token-dir-address {
+    padding: var(--spacing-sm) 0;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: var(--spacing-sm);
+}
+
+.token-dir-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.directory-footer {
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-subtle);
+}
+
+/* Gradient icon variants */
+.bg-gradient-orange {
+    background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
+}
+
+.bg-gradient-purple {
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+}
+
+@media (max-width: 640px) {
+    .directory-toolbar {
+        flex-direction: column;
+    }
+
+    .token-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .directory-header h1 {
+        font-size: 2rem;
+    }
+}

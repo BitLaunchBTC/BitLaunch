@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BitLaunch Social Post Render</title>
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap"
+        rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* 1. VARIABLES (from theme.css) */
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: linear-gradient(135deg, #12121a 0%, #0d0d14 100%);
+            --accent-orange: #ff6b00;
+            --accent-purple: #9945ff;
+            --accent-green: #14f195;
+            --text-primary: #ffffff;
+            --text-muted: #7a7a7a;
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --border-accent: rgba(255, 107, 0, 0.3);
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --font-primary: 'Inter', sans-serif;
+        }
+
+        /* 2. BASE STYLES */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: var(--text-primary);
+            font-family: var(--font-primary);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: background-color 0.3s ease;
+        }
+
+        /* 3. CANVAS CONTAINER (The Screenshot Area) */
+        .wrapper {
+            transform-origin: center;
+            transition: transform 0.3s ease;
+        }
+
+        .post-card {
+            width: 1200px;
+            height: 675px;
+            /* 16:9 Aspect Ratio */
+            background: var(--bg-primary);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid #333;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Background Effects (from home.css .hero-bg) */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+        }
+
+        .bg-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(ellipse at center, rgba(255, 107, 0, 0.08) 0%, rgba(153, 69, 255, 0.03) 40%, transparent 70%);
+            z-index: 0;
+        }
+
+        /* 4. CONTENT GRID (Replicating home.css .features-grid) */
+        .content {
+            z-index: 10;
+            width: 90%;
+            max-width: 1000px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-text {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        /* 5. CARD STYLES (Replicating home.css .feature-card exactly) */
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            /* Force 'hover' state for the screenshot so it looks active/premium */
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(153, 69, 255, 0.1));
+            border-radius: var(--radius-md);
+            color: var(--accent-orange);
+            margin-bottom: 16px;
+        }
+
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .feature-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.8rem;
+            color: #444;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .download-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ff6b00, #ff8533);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
+            transition: all 0.2s ease;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .download-btn:hover {
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 0, 0.6);
+        }
+
+        .download-btn:active {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <div class="post-card" id="capture-target">
+            <!-- Backgrounds -->
+            <div class="bg-grid"></div>
+            <div class="bg-glow"></div>
+
+            <div class="content">
+                <div class="header">
+                    <div class="brand-container">
+                        <div class="logo-icon-lg">
+                            <svg viewBox="0 0 512 512" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="g21" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#ff6b00" />
+                                        <stop offset="100%" style="stop-color:#9945ff" />
+                                    </linearGradient>
+                                </defs>
+                                <g transform="rotate(45, 256, 256)">
+                                    <path
+                                        d="M256,64 C256,64 384,200 384,320 C384,400 350,448 350,448 C350,448 320,350 256,350 C192,350 162,448 162,448 C162,448 128,400 128,320 C128,200 256,64 256,64 Z"
+                                        fill="url(#g21)" />
+                                    <circle cx="256" cy="200" r="40" fill="#ffffff" />
+                                    <path
+                                        d="M256,380 C256,380 290,420 290,460 C290,490 256,512 256,512 C256,512 222,490 222,460 C222,420 256,380 256,380 Z"
+                                        fill="url(#g21)" />
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="logo-text">BitLaunch</div>
+                    </div>
+                    <div class="subtitle">The Complete Toolkit</div>
+                </div>
+
+                <style>
+                    .brand-container {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 16px;
+                        margin-bottom: 8px;
+                    }
+
+                    .logo-icon-lg svg {
+                        filter: drop-shadow(0 0 10px rgba(255, 107, 0, 0.4));
+                    }
+                </style>
+
+                <div class="features-grid">
+                    <!-- 1. Create Token -->
+                    <div class="feature-card">
+                        <div class="feature-icon"><i data-lucide="coins"></i></div>
+                        <div class="feature-title">Create OP20 Tokens</div>
+                        <div class="feature-desc">Deploy custom tokens on OPNet with just a few clicks. No coding
+                            required.</div>
+                    </div>
+
+                    <!-- 2. Fair Launch -->
+                    <div class="feature-card">
+                        <div class="feature-icon"><i data-lucide="rocket"></i></div>
+                        <div class="feature-title">Fair Launch</div>
+                        <div class="feature-desc">Run transparent presales with whitelist, caps, and automatic refunds.
+                        </div>
+                    </div>
+
+                    <!-- 3. Vesting -->
+                    <div class="feature-card">
+                        <div class="feature-icon"><i data-lucide="lock"></i></div>
+                        <div class="feature-title">Vesting Schedules</div>
+                        <div class="feature-desc">Lock team tokens with customizable cliff and linear unlock periods.
+                        </div>
+                    </div>
+
+                    <!-- 4. Liquidity -->
+                    <div class="feature-card">
+                        <div class="feature-icon"><i data-lucide="shield"></i></div>
+                        <div class="feature-title">Liquidity Lock</div>
+                        <div class="feature-desc">Auto-add liquidity to MotoSwap and lock LP tokens for trust.</div>
+                    </div>
+
+                    <!-- 5. Community -->
+                    <div class="feature-card">
+                        <div class="feature-icon"><i data-lucide="users"></i></div>
+                        <div class="feature-title">Community First</div>
+                        <div class="feature-desc">Built-in airdrop tools to reward your early supporters.</div>
+                    </div>
+
+                    <!-- 6. Fast & Secure -->
+                    <div class="feature-card">
+                        <div class="feature-icon"><i data-lucide="zap"></i></div>
+                        <div class="feature-title">Fast & Secure</div>
+                        <div class="feature-desc">Powered by Bitcoin security with OPNet smart contract capability.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">Build on Bitcoin</div>
+        </div>
+    </div>
+
+    <button class="download-btn" id="modeBtn">
+        <i data-lucide="camera"></i> Enter Studio Mode
+    </button>
+
+    <script>
+        lucide.createIcons();
+
+        const wrapper = document.querySelector('.wrapper');
+        const btn = document.getElementById('modeBtn');
+        let isStudioMode = false;
+
+        // Auto-scale to fit screen (default view)
+        function resize() {
+            if (isStudioMode) return; // Don't resize in studio mode
+            const scale = Math.min(window.innerWidth / 1300, window.innerHeight / 800);
+            if (scale < 1) {
+                wrapper.style.transform = `scale(${scale})`;
+            } else {
+                wrapper.style.transform = 'scale(1)';
+            }
+        }
+        window.onresize = resize;
+        resize();
+
+        function toggleStudioMode() {
+            isStudioMode = !isStudioMode;
+
+            if (isStudioMode) {
+                // Enter Studio Mode
+                btn.style.display = 'none';
+                document.body.style.backgroundColor = '#000'; // Pure black for screenshot
+                wrapper.style.transform = 'scale(1.5)'; // Scale UP for high res details (Zoom in)
+                wrapper.style.cursor = 'zoom-out';
+
+                // Show toast
+                const toast = document.createElement('div');
+                toast.className = 'studio-toast';
+                toast.innerHTML = `
+                    <div style="font-weight: bold; margin-bottom: 4px; font-size: 1.2em;">📸 Studio Mode Active</div>
+                    <div style="margin-bottom: 8px;">Press <span style="background: #333; padding: 2px 6px; border-radius: 4px; border: 1px solid #555;">Win + Shift + S</span> to Capture</div>
+                    <div style="font-size: 0.85em; color: #aaa;">Click anywhere to exit</div>
+                `;
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 30px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: rgba(10, 10, 15, 0.95);
+                    border: 1px solid #444;
+                    padding: 16px 32px;
+                    border-radius: 12px;
+                    color: white;
+                    text-align: center;
+                    z-index: 1000;
+                    font-family: 'Inter', sans-serif;
+                    opacity: 0;
+                    transition: opacity 0.5s;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                    backdrop-filter: blur(10px);
+                `;
+                document.body.appendChild(toast);
+
+                // Fade in toast
+                requestAnimationFrame(() => toast.style.opacity = '1');
+
+                // Fade out toast strictly after 4s so it doesn't block the view
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    setTimeout(() => toast.remove(), 500);
+                }, 4000);
+
+            } else {
+                // Exit Studio Mode
+                btn.style.display = 'flex';
+                document.body.style.backgroundColor = '';
+                wrapper.style.cursor = 'default';
+                resize(); // Restore fit scale
+            }
+        }
+
+        // Click wrapper to exit studio mode
+        wrapper.addEventListener('click', () => {
+            if (isStudioMode) toggleStudioMode();
+        });
+
+        // Add onclick to button
+        btn.onclick = toggleStudioMode;
+
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

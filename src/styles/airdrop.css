@@ -1,0 +1,283 @@
+/* Airdrop Tool Styles (V2 — Merkle Airdrop) */
+.airdrop-page {
+    padding-bottom: var(--spacing-3xl);
+    min-height: 100vh;
+}
+
+.airdrop-page .page-hero {
+    margin-bottom: 0.25rem;
+}
+
+.airdrop-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+}
+
+.airdrop-container.narrow {
+    max-width: 700px;
+}
+
+.airdrop-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.airdrop-header h1 {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-sm);
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.airdrop-header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+/* Airdrop Card (Create form) */
+.airdrop-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    animation: slideUp 0.5s ease-out 0.2s backwards;
+}
+
+/* Token list */
+.airdrop-token-list {
+    display: grid;
+    gap: var(--spacing-sm);
+}
+
+.token-select-btn {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.token-select-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--border-light);
+}
+
+.token-select-btn.selected {
+    border-color: var(--accent-purple);
+    background: rgba(153, 69, 255, 0.08);
+}
+
+/* CSV upload */
+.csv-upload-area {
+    border: 2px dashed var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-xl);
+    text-align: center;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    margin-bottom: var(--spacing-lg);
+}
+
+.csv-upload-area:hover {
+    border-color: var(--accent-purple);
+    background: rgba(153, 69, 255, 0.05);
+}
+
+/* Recipients text input */
+.recipients-input {
+    width: 100%;
+    min-height: 200px;
+    padding: var(--spacing-md);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.recipients-input:focus {
+    outline: none;
+    border-color: var(--accent-purple);
+    box-shadow: 0 0 0 2px rgba(153, 69, 255, 0.1);
+}
+
+/* Summary bar */
+.airdrop-summary-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+    background: rgba(153, 69, 255, 0.08);
+    border: 1px solid rgba(153, 69, 255, 0.15);
+    border-radius: var(--radius-md);
+    margin-top: var(--spacing-lg);
+}
+
+/* My Airdrops list */
+.airdrop-list {
+    display: grid;
+    gap: var(--spacing-md);
+}
+
+.airdrop-card-item {
+    padding: var(--spacing-lg);
+}
+
+.airdrop-card-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    align-items: center;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-subtle);
+    margin-top: var(--spacing-sm);
+}
+
+/* Claim Page */
+.claim-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+    text-align: center;
+}
+
+.claim-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.claim-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 0 30px rgba(153, 69, 255, 0.3);
+}
+
+.claim-header h1 {
+    font-size: 2rem;
+    margin: 0;
+}
+
+.claim-action-section {
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-xl);
+    border-top: 1px solid var(--border-subtle);
+}
+
+.claim-prompt {
+    text-align: center;
+}
+
+.claim-eligible {
+    background: rgba(153, 69, 255, 0.08);
+    border: 1px solid rgba(153, 69, 255, 0.15);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+}
+
+.claim-eligible-amount {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    text-align: center;
+}
+
+.claim-amount-value {
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-orange));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Summary stats (retained for backwards compat) */
+.summary-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.stat-box {
+    background: var(--bg-tertiary);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-xs);
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+/* Back button */
+.back-btn {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color var(--transition-fast);
+}
+
+.back-btn:hover {
+    color: var(--text-primary);
+}
+
+/* Text helpers */
+.text-green {
+    color: var(--accent-green);
+}
+
+.text-orange {
+    color: var(--accent-orange);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .airdrop-header h1 {
+        font-size: 2rem;
+    }
+
+    .summary-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .claim-amount-value {
+        font-size: 1.5rem;
+    }
+
+    .airdrop-summary-bar {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        text-align: center;
+    }
+}

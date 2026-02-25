@@ -1,0 +1,36 @@
+<svg width="1500" height="500" viewBox="0 0 1500 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d0d14" />
+      <stop offset="100%" style="stop-color:#1a1a24" />
+    </linearGradient>
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b00" />
+      <stop offset="100%" style="stop-color:#9945ff" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="15" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1500" height="500" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle Mesh Patterns -->
+  <circle cx="150" cy="100" r="400" fill="url(#logoGrad)" opacity="0.05" filter="url(#glow)"/>
+  <circle cx="1350" cy="400" r="300" fill="url(#logoGrad)" opacity="0.05" filter="url(#glow)"/>
+
+  <!-- Logo (Right Side Watermark) -->
+  <g transform="translate(1100, 50) scale(0.8)" opacity="0.2">
+      <g transform="rotate(45, 256, 256)">
+          <path d="M256,64 C256,64 384,200 384,320 C384,400 350,448 350,448 C350,448 320,350 256,350 C192,350 162,448 162,448 C162,448 128,400 128,320 C128,200 256,64 256,64 Z" 
+                fill="url(#logoGrad)"/>
+      </g>
+  </g>
+
+  <!-- Title Text -->
+  <text x="100" y="280" font-family="Arial, sans-serif" font-weight="900" font-size="120" fill="white" letter-spacing="-2">BITLAUNCH</text>
+  <text x="105" y="340" font-family="Arial, sans-serif" font-weight="600" font-size="30" fill="#ccc" letter-spacing="5">THE PREMIER OP_NET LAUNCHPAD</text>
+
+</svg>

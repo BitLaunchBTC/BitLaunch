@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BitLaunch - Next-Gen Rockets</title>
+    <style>
+        body {
+            background-color: #0a0a0f;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px;
+            gap: 50px;
+        }
+
+        h1 {
+            background: linear-gradient(135deg, #ff6b00, #9945ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            display: flex;
+            gap: 50px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            border-color: #ff6b00;
+        }
+
+        svg {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #ccc;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>BitLaunch - Round 5</h1>
+    <p>Pushing the "Rocket" concept to the future.</p>
+
+    <div class="container">
+
+        <!-- Option 13: Quantum Drive -->
+        <div class="card">
+            <h3>Option 13: Quantum Drive</h3>
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g13" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#ff6b00" />
+                        <stop offset="100%" style="stop-color:#9945ff" />
+                    </linearGradient>
+                    <mask id="cutout">
+                        <rect x="0" y="0" width="512" height="512" fill="white" />
+                        <path d="M256,220 L270,300 L242,300 Z" fill="black" /> <!-- Engine Vent -->
+                    </mask>
+                </defs>
+                <!-- Central Core -->
+                <circle cx="256" cy="256" r="100" fill="none" stroke="url(#g13)" stroke-width="10"
+                    stroke-dasharray="10,10" opacity="0.5" />
+                <!-- Rocket Shape -->
+                <path d="M256,40 L340,180 L320,380 L256,472 L192,380 L172,180 Z" fill="none" stroke="url(#g13)"
+                    stroke-width="20" stroke-linecap="round" stroke-linejoin="round" />
+                <!-- Energy Pulse Center -->
+                <circle cx="256" cy="200" r="30" fill="#ff6b00">
+                    <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite" />
+                </circle>
+            </svg>
+            <p>Energy Core Rocket</p>
+        </div>
+
+        <!-- Option 14: Hyper-Arrow (Minimalist Luxury) -->
+        <div class="card">
+            <h3>Option 14: Hyper-Arrow</h3>
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g14" x1="0%" y1="100%" x2="0%" y2="0%">
+                        <stop offset="0%" style="stop-color:#ff6b00" />
+                        <stop offset="100%" style="stop-color:#9945ff" />
+                    </linearGradient>
+                </defs>
+                <!-- Very sleek, thin rocket -->
+                <path d="M256,32 L300,128 L280,400 L256,480 L232,400 L212,128 Z" fill="url(#g14)" />
+                <!-- Speed Lines -->
+                <path d="M128,400 L128,300 M384,400 L384,300" stroke="rgba(255,255,255,0.2)" stroke-width="10"
+                    stroke-linecap="round" />
+            </svg>
+            <p>Minimal & Vertical</p>
+        </div>
+
+        <!-- Option 15: Cyber-Shuttle (Complex) -->
+        <div class="card">
+            <h3>Option 15: Cyber-Shuttle</h3>
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g15" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#ff6b00" />
+                        <stop offset="100%" style="stop-color:#9945ff" />
+                    </linearGradient>
+                </defs>
+                <!-- Main Body -->
+                <path d="M256,80 L360,320 L256,380 L152,320 Z" fill="none" stroke="url(#g15)" stroke-width="20"
+                    stroke-linejoin="round" />
+                <!-- Thrusters -->
+                <path d="M180,320 L150,420 M332,320 L362,420" stroke="#9945ff" stroke-width="25"
+                    stroke-linecap="round" />
+                <!-- Cockpit -->
+                <path d="M256,180 L280,250 L232,250 Z" fill="#ff6b00" />
+            </svg>
+            <p>Sci-Fi Shuttle</p>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

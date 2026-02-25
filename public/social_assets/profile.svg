@@ -1,0 +1,23 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g21" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b00" />
+      <stop offset="100%" style="stop-color:#9945ff" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="400" fill="#0a0a0f"/>
+  
+  <!-- Logo Centered and Scaled (Original is 512x512, scaling to fit 400x400 comfortably) -->
+  <g transform="translate(72, 72) scale(0.5)">
+      <!-- Copy of Logo Paths from logo.svg -->
+      <g transform="rotate(45, 256, 256)">
+          <path d="M256,64 C256,64 384,200 384,320 C384,400 350,448 350,448 C350,448 320,350 256,350 C192,350 162,448 162,448 C162,448 128,400 128,320 C128,200 256,64 256,64 Z" 
+                fill="url(#g21)"/>
+          <circle cx="256" cy="200" r="40" fill="#ffffff" />
+          <path d="M256,380 C256,380 290,420 290,460 C290,490 256,512 256,512 C256,512 222,490 222,460 C222,420 256,380 256,380 Z" 
+                fill="url(#g21)"/>
+      </g>
+  </g>
+</svg>

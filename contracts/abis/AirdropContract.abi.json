@@ -1,0 +1,375 @@
+{
+    "functions": [
+        {
+            "name": "createAirdrop",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "token",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "totalAmount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "merkleRoot",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "expiryBlock",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "airdropId",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "claim",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "airdropId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "proof",
+                    "type": "BYTES"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "claimedAmount",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "cancelAirdrop",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "airdropId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "refundedAmount",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "recoverExpired",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "airdropId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "recoveredAmount",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "hasClaimed",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "airdropId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "claimer",
+                    "type": "ADDRESS"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "claimed",
+                    "type": "BOOL"
+                }
+            ]
+        },
+        {
+            "name": "getClaimedAmount",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "airdropId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "claimer",
+                    "type": "ADDRESS"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "claimedAmount",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "getAirdrop",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "airdropId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "creator",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "token",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "totalAmount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "claimedAmount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "merkleRoot",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "expiryBlock",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "cancelled",
+                    "type": "BOOL"
+                }
+            ]
+        },
+        {
+            "name": "getAirdropCount",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "count",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "getRemainingAmount",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "airdropId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "remaining",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "isActive",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "airdropId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "active",
+                    "type": "BOOL"
+                }
+            ]
+        },
+        {
+            "name": "getCreatorAirdropCount",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "creator",
+                    "type": "ADDRESS"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "count",
+                    "type": "UINT32"
+                }
+            ]
+        },
+        {
+            "name": "getCreatorAirdropByIndex",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "creator",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "index",
+                    "type": "UINT32"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "airdropId",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "verifyProof",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "airdropId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "claimer",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "proof",
+                    "type": "BYTES"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "valid",
+                    "type": "BOOL"
+                }
+            ]
+        }
+    ],
+    "events": [
+        {
+            "name": "AirdropCreated",
+            "values": [
+                {
+                    "name": "airdropId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "creator",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "token",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "totalAmount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "expiryBlock",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        },
+        {
+            "name": "TokensClaimed",
+            "values": [
+                {
+                    "name": "airdropId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "claimer",
+                    "type": "ADDRESS"
+                },
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        },
+        {
+            "name": "AirdropCancelled",
+            "values": [
+                {
+                    "name": "airdropId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "refundedAmount",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        },
+        {
+            "name": "AirdropExpiredRecovered",
+            "values": [
+                {
+                    "name": "airdropId",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "recoveredAmount",
+                    "type": "UINT256"
+                }
+            ],
+            "type": "Event"
+        }
+    ]
+}

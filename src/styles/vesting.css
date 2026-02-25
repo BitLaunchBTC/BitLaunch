@@ -1,0 +1,149 @@
+/* Vesting Page Styles */
+.vesting-page {
+    padding-bottom: var(--spacing-3xl);
+    min-height: 100vh;
+}
+
+.vesting-page .page-hero {
+    margin-bottom: 0.25rem;
+}
+
+.vesting-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+}
+
+.vesting-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.vesting-header h1 {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-sm);
+    background: linear-gradient(135deg, #fff 0%, var(--text-muted) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.vesting-header p {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Tabs */
+.vesting-tabs {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+    animation: slideUp 0.5s ease-out 0.1s backwards;
+}
+
+.vesting-tab {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-full);
+    color: var(--text-secondary);
+    font-weight: 600;
+    transition: all var(--transition-normal);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.vesting-tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.vesting-tab.active {
+    background: var(--accent-orange);
+    color: white;
+    border-color: var(--accent-orange);
+    box-shadow: var(--glow-orange);
+}
+
+/* Create Schedule Form */
+.create-schedule-card {
+    max-width: 600px;
+    margin: 0 auto;
+    animation: slideUp 0.5s ease-out 0.2s backwards;
+}
+
+.schedule-grid {
+    display: grid;
+    gap: var(--spacing-lg);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+}
+
+@media (max-width: 640px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Vesting List */
+.vesting-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: var(--spacing-lg);
+    animation: slideUp 0.5s ease-out 0.2s backwards;
+}
+
+.vesting-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.vesting-info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-sm);
+    font-size: 0.9rem;
+}
+
+.vesting-label {
+    color: var(--text-muted);
+}
+
+.vesting-value {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.vesting-progress {
+    margin: var(--spacing-lg) 0;
+}
+
+.progress-bar-bg {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+    border-radius: var(--radius-full);
+    transition: width 1s ease-out;
+}
+
+.vesting-actions {
+    margin-top: auto;
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-subtle);
+}

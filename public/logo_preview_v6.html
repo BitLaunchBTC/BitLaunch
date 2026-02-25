@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BitLaunch - Plasma Rockets</title>
+    <style>
+        body {
+            background-color: #0a0a0f;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px;
+            gap: 50px;
+        }
+
+        h1 {
+            background: linear-gradient(135deg, #ff6b00, #9945ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            display: flex;
+            gap: 50px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            border-color: #ff6b00;
+        }
+
+        svg {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #ccc;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>BitLaunch - Plasma Style</h1>
+    <p>Refining the "Geometric / Tech" Rocket Look.</p>
+
+    <div class="container">
+
+        <!-- Option 11: The Original Plasma -->
+        <div class="card">
+            <h3>Option 11: Original Plasma</h3>
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g11" x1="0%" y1="100%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#ff6b00" />
+                        <stop offset="50%" style="stop-color:#ff8533" />
+                        <stop offset="100%" style="stop-color:#9945ff" />
+                    </linearGradient>
+                </defs>
+                <path d="M256,40 L360,200 L320,400 L256,360 L192,400 L152,200 Z" fill="url(#g11)" opacity="0.9" />
+                <circle cx="256" cy="200" r="40" fill="#0a0a0f" stroke="rgba(255,255,255,0.5)" stroke-width="10" />
+                <path d="M192,400 L170,480 M320,400 L342,480" stroke="#9945ff" stroke-width="20"
+                    stroke-linecap="round" />
+            </svg>
+            <p>Balanced & Modern</p>
+        </div>
+
+        <!-- Option 16: Plasma Interceptor -->
+        <div class="card">
+            <h3>Option 16: Interceptor</h3>
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g16" x1="0%" y1="100%" x2="0%" y2="0%">
+                        <stop offset="0%" style="stop-color:#ff6b00" />
+                        <stop offset="100%" style="stop-color:#9945ff" />
+                    </linearGradient>
+                </defs>
+                <!-- Thinner, sharper body -->
+                <path d="M256,20 L320,400 L256,340 L192,400 Z" fill="url(#g16)" opacity="0.9" />
+                <!-- Side Wings separated -->
+                <path d="M320,250 L380,380 L320,360 Z" fill="rgba(153,69,255,0.5)" stroke="#9945ff" stroke-width="5" />
+                <path d="M192,250 L132,380 L192,360 Z" fill="rgba(153,69,255,0.5)" stroke="#9945ff" stroke-width="5" />
+            </svg>
+            <p>Fast & Aggressive</p>
+        </div>
+
+        <!-- Option 17: Plasma Heavy -->
+        <div class="card">
+            <h3>Option 17: Heavy Lifter</h3>
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="g17" x1="0%" y1="100%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#ff6b00" />
+                        <stop offset="100%" style="stop-color:#9945ff" />
+                    </linearGradient>
+                </defs>
+                <!-- Wider Body -->
+                <path d="M256,60 L380,200 L380,400 L256,460 L132,400 L132,200 Z" fill="none" stroke="url(#g17)"
+                    stroke-width="20" />
+                <!-- Core Filled -->
+                <path d="M256,120 L320,380 L256,420 L192,380 Z" fill="url(#g17)" opacity="0.8" />
+                <!-- Tech Lines -->
+                <path d="M132,260 L380,260" stroke="rgba(255,255,255,0.2)" stroke-width="10" />
+                <circle cx="256" cy="260" r="30" fill="#0a0a0f" stroke="white" stroke-width="5" />
+            </svg>
+            <p>Robust & Industrial</p>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

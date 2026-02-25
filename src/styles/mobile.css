@@ -1,0 +1,659 @@
+/* BitLaunch - Mobile Responsive Enhancements (V2) */
+
+/* ==================== */
+/* MOBILE BASE         */
+/* ==================== */
+@media (max-width: 768px) {
+
+    /* Page titles */
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    /* Buttons */
+    .btn {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-sm {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    /* Container padding */
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+
+    /* Cards */
+    .card {
+        padding: var(--spacing-md);
+    }
+
+    /* Form rows → stack */
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    /* Grid helpers */
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==================== */
+/* HOME PAGE MOBILE    */
+/* ==================== */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 80px var(--spacing-md) var(--spacing-2xl);
+        min-height: auto;
+    }
+
+    .hero-title {
+        font-size: 2.25rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .hero-actions .btn {
+        width: 100%;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .feature-card {
+        padding: var(--spacing-lg);
+    }
+}
+
+/* ==================== */
+/* LAUNCH PAGE MOBILE  */
+/* ==================== */
+@media (max-width: 768px) {
+    .launch-container {
+        padding: var(--spacing-md);
+    }
+
+    .wizard-steps {
+        gap: var(--spacing-xs);
+    }
+
+    .step-number {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+    }
+
+    .step-label {
+        display: none;
+    }
+
+    .token-preview {
+        margin-top: var(--spacing-lg);
+    }
+}
+
+/* ==================== */
+/* EXPLORE PAGE MOBILE */
+/* ==================== */
+@media (max-width: 768px) {
+    .explore-header {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        align-items: stretch;
+    }
+
+    .filter-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding-bottom: var(--spacing-xs);
+    }
+
+    .filter-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .filter-tabs button {
+        flex-shrink: 0;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .presale-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==================== */
+/* PRESALE DETAIL      */
+/* ==================== */
+@media (max-width: 768px) {
+    .presale-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .presale-main {
+        order: 2;
+    }
+
+    .presale-sidebar {
+        order: 1;
+    }
+
+    .contribution-input-group {
+        flex-direction: column;
+    }
+
+    .contribution-input-group .btn {
+        width: 100%;
+    }
+
+    .presale-stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .detail-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+
+    .token-title h1 {
+        font-size: 1.75rem;
+    }
+
+    .contribution-card {
+        position: static;
+    }
+}
+
+/* ==================== */
+/* CREATE PRESALE      */
+/* ==================== */
+@media (max-width: 768px) {
+    .presale-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-section {
+        padding: var(--spacing-md);
+    }
+
+    .whitelist-input {
+        flex-direction: column;
+    }
+
+    .whitelist-input .btn {
+        width: 100%;
+    }
+
+    .timing-summary {
+        font-size: 0.85rem;
+    }
+
+    .timing-row {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+}
+
+/* ==================== */
+/* DASHBOARD MOBILE    */
+/* ==================== */
+@media (max-width: 768px) {
+    .dashboard-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stat-card {
+        padding: var(--spacing-md);
+    }
+
+    .stat-card-icon {
+        margin: 0;
+    }
+
+    /* V2 Dashboard tabs — horizontal scroll */
+    .dashboard-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .dashboard-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .tab-btn {
+        flex-shrink: 0;
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    /* V2: Hide tab text on mobile, show only icon */
+    .tab-btn span {
+        display: none;
+    }
+
+    /* V2 Cards grid */
+    .dash-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dash-card-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .investment-card {
+        flex-wrap: wrap;
+    }
+
+    .investment-amount {
+        width: 100%;
+        text-align: left;
+        margin-top: var(--spacing-sm);
+        padding-top: var(--spacing-sm);
+        border-top: 1px solid var(--border-subtle);
+    }
+}
+
+/* ==================== */
+/* VESTING PAGE MOBILE */
+/* ==================== */
+@media (max-width: 768px) {
+    .vesting-container {
+        padding: 0 var(--spacing-md);
+    }
+
+    /* Tabs — horizontal scroll */
+    .vesting-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .vesting-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .vesting-tab {
+        flex-shrink: 0;
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 0.85rem;
+    }
+
+    /* Vesting list — single column */
+    .vesting-list {
+        grid-template-columns: 1fr;
+    }
+
+    /* Schedule grid form — stack */
+    .schedule-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vesting-actions .btn {
+        width: 100%;
+    }
+}
+
+/* ==================== */
+/* LOCK PAGE MOBILE    */
+/* ==================== */
+@media (max-width: 768px) {
+    .liquidity-container {
+        padding: 0 var(--spacing-md);
+    }
+
+    .lock-card {
+        padding: var(--spacing-lg);
+    }
+
+    /* V2 Lock cards */
+    .lock-item-v2 {
+        padding: var(--spacing-md);
+    }
+
+    .lock-item-actions {
+        flex-direction: column;
+    }
+
+    .lock-item-actions .btn {
+        width: 100%;
+    }
+
+    .lock-inline-form {
+        flex-direction: column;
+    }
+
+    .lock-inline-form .form-input {
+        width: 100%;
+    }
+
+    .lock-inline-form .btn {
+        width: 100%;
+    }
+}
+
+/* ==================== */
+/* AIRDROP PAGE MOBILE */
+/* ==================== */
+@media (max-width: 768px) {
+    .airdrop-container {
+        padding: 0 var(--spacing-md);
+    }
+
+    .airdrop-card {
+        padding: var(--spacing-lg);
+    }
+
+    .airdrop-summary-bar {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        text-align: center;
+    }
+
+    .airdrop-card-actions {
+        flex-direction: column;
+    }
+
+    .airdrop-card-actions .btn {
+        width: 100%;
+    }
+
+    /* Claim page */
+    .claim-card {
+        padding: var(--spacing-lg);
+    }
+
+    .claim-icon {
+        width: 64px;
+        height: 64px;
+    }
+
+    .claim-amount-value {
+        font-size: 1.5rem;
+    }
+}
+
+/* ==================== */
+/* TOKEN DIRECTORY     */
+/* ==================== */
+@media (max-width: 768px) {
+    .directory-container {
+        padding: 0 var(--spacing-md);
+    }
+
+    .directory-toolbar {
+        flex-direction: column;
+    }
+
+    .directory-toolbar .btn {
+        width: 100%;
+    }
+
+    .token-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==================== */
+/* INFO TABLE MOBILE   */
+/* ==================== */
+@media (max-width: 640px) {
+    .info-table .info-row {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+        align-items: flex-start;
+    }
+
+    .info-table .info-value {
+        font-size: 0.9rem;
+    }
+
+    .presale-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==================== */
+/* PAGE HERO MOBILE    */
+/* ==================== */
+@media (max-width: 768px) {
+    .page-hero {
+        padding: 4.5rem 0 0.25rem;
+    }
+
+    .page-hero-title {
+        font-size: 1.75rem;
+    }
+
+    .page-hero-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .page-hero-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .page-hero-orb.orb-1 {
+        width: 250px;
+        height: 250px;
+    }
+
+    .page-hero-orb.orb-2 {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+/* ==================== */
+/* SMALL MOBILE        */
+/* ==================== */
+@media (max-width: 375px) {
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    .hero-title {
+        font-size: 1.875rem;
+    }
+
+    .btn {
+        padding: 0.625rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .page-hero {
+        padding: 4rem 0 0.25rem;
+    }
+
+    .page-hero-title {
+        font-size: 1.5rem;
+    }
+
+    .dashboard-stats {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+
+    .stat-card {
+        padding: var(--spacing-md);
+    }
+
+    .summary-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .block-info-banner {
+        font-size: 0.8rem;
+        padding: var(--spacing-sm);
+    }
+
+    /* Step Wizard — compact on very small */
+    .step-wizard {
+        padding: var(--spacing-sm);
+    }
+
+    .step-wizard-label {
+        font-size: 0.7rem;
+    }
+}
+
+/* ==================== */
+/* TABLET (769-1024)   */
+/* ==================== */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .presale-detail-grid {
+        grid-template-columns: 1.5fr 1fr;
+        gap: var(--spacing-lg);
+    }
+
+    .token-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dash-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ==================== */
+/* TOUCH OPTIMIZATIONS */
+/* ==================== */
+@media (hover: none) and (pointer: coarse) {
+
+    /* Larger touch targets */
+    .btn {
+        min-height: 44px;
+    }
+
+    .nav-link {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+
+    .tab-btn {
+        min-height: 44px;
+    }
+
+    .vesting-tab {
+        min-height: 44px;
+    }
+
+    .filter-tabs button {
+        min-height: 44px;
+    }
+
+    .token-select-btn {
+        min-height: 48px;
+    }
+
+    .back-btn {
+        min-height: 44px;
+        padding: 0.5rem 0.875rem;
+    }
+
+    .address-display-copy,
+    .address-display-link {
+        min-width: 36px;
+        min-height: 36px;
+        padding: 6px;
+    }
+
+    .token-selector-item {
+        min-height: 48px;
+    }
+
+    .dropdown-item {
+        min-height: 44px;
+    }
+
+    .footer-nav-link {
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Remove hover effects on touch */
+    .card:hover,
+    .presale-card:hover,
+    .lock-item-v2:hover,
+    .token-dir-card:hover {
+        transform: none;
+    }
+
+    .btn-primary:hover,
+    .btn-secondary:hover {
+        transform: none;
+    }
+
+    .investment-card:hover {
+        transform: none;
+    }
+}
+
+/* ==================== */
+/* LANDSCAPE MOBILE    */
+/* ==================== */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero-section {
+        min-height: auto;
+        padding: 100px var(--spacing-lg) var(--spacing-xl);
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
+}
+
+/* ==================== */
+/* REDUCED MOTION      */
+/* ==================== */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .status-dot.connected {
+        animation: none;
+    }
+
+    .loading-spinner .spinner-ring,
+    .spinner-core {
+        animation: none;
+    }
+
+    .status-badge-dot {
+        animation: none;
+    }
+}
