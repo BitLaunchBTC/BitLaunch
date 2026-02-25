@@ -443,7 +443,7 @@
 /* ==================== */
 @media (max-width: 768px) {
     .page-hero {
-        padding: 4.5rem 0 0.25rem;
+        padding: 4.5rem 0 0.5rem;
     }
 
     .page-hero-title {
@@ -488,7 +488,7 @@
     }
 
     .page-hero {
-        padding: 4rem 0 0.25rem;
+        padding: 4rem 0 0.5rem;
     }
 
     .page-hero-title {

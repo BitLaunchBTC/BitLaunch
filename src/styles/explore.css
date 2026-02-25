@@ -5,7 +5,7 @@
 }
 
 .explore-page .page-hero {
-    margin-bottom: 0.25rem;
+    margin-bottom: 1rem;
 }
 
 .explore-hero-row {
@@ -175,6 +175,7 @@
     gap: var(--spacing-lg);
     width: 100%;
     flex-wrap: wrap;
+    margin-bottom: 1.5rem;
 }
 
 .search-container {
