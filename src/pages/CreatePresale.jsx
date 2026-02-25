@@ -1,9 +1,12 @@
 // BitLaunch - Create Presale (V2)
 // Creates a new presale via the PresaleFactory contract.
 // V2 changes: block-based start/end, step wizard, anti-bot config
-import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Rocket, Info, Shield, ShoppingBag, Settings, Eye, Wallet } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import {
+    ArrowLeft, ArrowRight, Rocket, Info, Shield, ShoppingBag, Settings, Eye, Wallet,
+    CheckCircle2, Loader, Clock, Search, FileCheck, Send, LayoutDashboard, Plus, PartyPopper
+} from 'lucide-react';
 import useScrollAnimation from '../hooks/useScrollAnimation';
 import { presaleFactoryService } from '../services/PresaleFactoryService';
 import { recordTransaction, TX_TYPES } from '../services/txHistory';
@@ -13,6 +16,7 @@ import { useWallet } from '../contexts/WalletContext';
 import { useToast } from '../components/Toast';
 import StepWizard from '../components/StepWizard';
 import AddressDisplay from '../components/AddressDisplay';
+import TxTracker from '../components/TxTracker';
 import { blocksToHumanTime } from '../services/blockTime';
 import '../styles/presale.css';
 
@@ -25,6 +29,8 @@ const CreatePresale = () => {
     useScrollAnimation();
     const [loading, setLoading] = useState(false);
     const [loadingMessage, setLoadingMessage] = useState('');
+    const [created, setCreated] = useState(false);
+    const [createResult, setCreateResult] = useState(null);
     const [currentStep, setCurrentStep] = useState(0);
     const [currentBlock, setCurrentBlock] = useState(0);
     const [errors, setErrors] = useState({});
@@ -125,6 +131,48 @@ const CreatePresale = () => {
     const durationBlocks = parseInt(formData.durationBlocks) || 0;
     const endBlock = startBlock + durationBlocks;
 
+    // ── Progress tracker steps ──
+    const PROGRESS_STEPS = [
+        {
+            label: 'Check Allowance',
+            desc: 'Verifying your current token approval on-chain',
+            icon: Search,
+        },
+        {
+            label: 'Approve Tokens',
+            desc: 'Confirm in wallet — this lets the factory transfer your tokens',
+            icon: Shield,
+        },
+        {
+            label: 'Confirm Approval',
+            desc: 'Waiting for approval tx to be mined on Bitcoin (~10 min avg)',
+            icon: Clock,
+        },
+        {
+            label: 'Create Presale',
+            desc: 'Simulating the presale contract deployment on-chain',
+            icon: FileCheck,
+        },
+        {
+            label: 'Sign & Broadcast',
+            desc: 'Sign the creation tx in your wallet to deploy the presale',
+            icon: Send,
+        },
+    ];
+
+    /** Derive active progress step index from loadingMessage */
+    const getProgressStep = (msg) => {
+        if (!msg) return 0;
+        const m = msg.toLowerCase();
+        if (m.includes('confirming presale') || m.includes('sign')) return 4;
+        if (m.includes('creating presale')) return 3;
+        if (m.includes('waiting for approval')) return 2;
+        if (m.includes('approving token')) return 1;
+        return 0; // "Preparing..." or "Checking allowance..."
+    };
+
+    const activeProgressStep = getProgressStep(loadingMessage);
+
     const handleSubmit = async () => {
         if (!connected) {
             toast.error('Please connect your wallet first');
@@ -162,13 +210,9 @@ const CreatePresale = () => {
                 status: result.txHash ? 'pending' : 'pending',
             });
 
+            setCreateResult(result);
+            setCreated(true);
             toast.success('Presale created successfully!');
-
-            if (result.presaleAddress) {
-                setTimeout(() => navigate(`/presale/${encodeURIComponent(result.presaleAddress)}`), 1500);
-            } else {
-                setTimeout(() => navigate('/dashboard'), 1500);
-            }
         } catch (error) {
             console.error(error);
             toast.error(error.message || 'Failed to create presale');
@@ -205,7 +249,7 @@ const CreatePresale = () => {
         );
     }
 
-    // Loading state
+    // Loading state — multi-step progress tracker
     if (loading) {
         return (
             <div className="presale-page create-presale-page page-transition">
@@ -217,10 +261,193 @@ const CreatePresale = () => {
                 <div className="presale-container narrow">
                     <div className="wizard-card">
                         <div className="deploy-loading">
-                            <div className="loading-spinner"></div>
                             <h3>Creating Presale...</h3>
-                            <p>{loadingMessage || 'Please confirm the transactions in your wallet.'}</p>
+                            <p className="deploy-loading-subtitle">
+                                This requires multiple on-chain transactions. Each step must confirm on Bitcoin before the next can proceed.
+                            </p>
                         </div>
+
+                        <div className="presale-progress-tracker">
+                            {PROGRESS_STEPS.map((step, i) => {
+                                const StepIcon = step.icon;
+                                const isComplete = i < activeProgressStep;
+                                const isActive = i === activeProgressStep;
+                                const isPending = i > activeProgressStep;
+                                const stepClass = isComplete ? 'complete' : isActive ? 'active' : 'pending';
+
+                                return (
+                                    <div key={i} className={`progress-step ${stepClass}`}>
+                                        {i > 0 && (
+                                            <div className={`progress-step-line ${isComplete ? 'complete' : isActive ? 'active' : ''}`} />
+                                        )}
+                                        <div className="progress-step-row">
+                                            <div className="progress-step-icon">
+                                                {isComplete ? (
+                                                    <CheckCircle2 size={20} />
+                                                ) : isActive ? (
+                                                    <Loader size={20} className="spin" />
+                                                ) : (
+                                                    <StepIcon size={20} />
+                                                )}
+                                            </div>
+                                            <div className="progress-step-content">
+                                                <div className="progress-step-label">{step.label}</div>
+                                                <div className="progress-step-desc">{step.desc}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {loadingMessage && (
+                            <div className="progress-live-message">
+                                <Loader size={14} className="spin" />
+                                <span>{loadingMessage}</span>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Success state — presale created
+    if (created && createResult) {
+        return (
+            <div className="presale-page create-presale-page page-transition">
+                <section className="page-hero">
+                    <div className="page-hero-orb orb-1" />
+                    <div className="page-hero-orb orb-2" />
+                    <div className="page-hero-grid" />
+                </section>
+                <div className="presale-container narrow">
+                    {/* Celebration header */}
+                    <div className="deploy-success-hero">
+                        <div className="confetti-wrapper" aria-hidden="true">
+                            {Array.from({ length: 16 }).map((_, i) => (
+                                <span key={i} className={`confetti confetti-${i % 4}`} />
+                            ))}
+                        </div>
+                        <div className="success-icon-ring">
+                            <div className="success-icon-inner">
+                                <PartyPopper size={36} />
+                            </div>
+                        </div>
+                        <h1 className="deploy-success-title">Presale Created!</h1>
+                        <p className="deploy-success-subtitle">
+                            Your presale is now live on the blockchain
+                        </p>
+                    </div>
+
+                    {/* Presale summary card */}
+                    <div className="deploy-info-card">
+                        <div className="deploy-info-grid">
+                            <div className="deploy-info-item">
+                                <span className="deploy-info-label">Hard Cap</span>
+                                <span className="deploy-info-value">{parseFloat(formData.hardCap || 0).toLocaleString()} sats</span>
+                            </div>
+                            <div className="deploy-info-item">
+                                <span className="deploy-info-label">Soft Cap</span>
+                                <span className="deploy-info-value">{parseFloat(formData.softCap || 0).toLocaleString()} sats</span>
+                            </div>
+                            <div className="deploy-info-item">
+                                <span className="deploy-info-label">Rate</span>
+                                <span className="deploy-info-value">{formData.tokenRate} tok/sat</span>
+                            </div>
+                            <div className="deploy-info-item">
+                                <span className="deploy-info-label">Duration</span>
+                                <span className="deploy-info-value">{durationBlocks > 0 ? blocksToHumanTime(durationBlocks) : '\u2014'}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Address cards */}
+                    <div className="deploy-addresses">
+                        {createResult.presaleAddress && (
+                            <div className="deploy-address-card highlight">
+                                <div className="deploy-address-header">
+                                    <span className="deploy-address-label">Presale Contract Address</span>
+                                    <span className="deploy-address-badge">Save this!</span>
+                                </div>
+                                <div className="deploy-address-value">
+                                    <AddressDisplay
+                                        address={createResult.presaleAddress}
+                                        truncate={false}
+                                        copyable={true}
+                                    />
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="deploy-address-card">
+                            <div className="deploy-address-header">
+                                <span className="deploy-address-label">Token Address</span>
+                            </div>
+                            <div className="deploy-address-value">
+                                <AddressDisplay
+                                    address={formData.tokenAddress}
+                                    truncate={false}
+                                    copyable={true}
+                                />
+                            </div>
+                        </div>
+
+                        {createResult.txHash && (
+                            <div className="deploy-address-card">
+                                <div className="deploy-address-header">
+                                    <span className="deploy-address-label">Transaction Hash</span>
+                                </div>
+                                <div className="deploy-address-value">
+                                    <AddressDisplay
+                                        address={createResult.txHash}
+                                        truncate={false}
+                                        copyable={true}
+                                    />
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Real-time Transaction Tracker */}
+                    {createResult.txHash && (
+                        <TxTracker
+                            txHash={createResult.txHash}
+                            onConfirmed={() => toast.success('Presale transaction confirmed on-chain!')}
+                        />
+                    )}
+
+                    {/* Action buttons */}
+                    <div className="deploy-success-actions">
+                        {createResult.presaleAddress && (
+                            <Link
+                                to={`/presale/${encodeURIComponent(createResult.presaleAddress)}`}
+                                className="btn btn-primary btn-lg"
+                            >
+                                <Eye size={18} />
+                                <span>View Presale</span>
+                            </Link>
+                        )}
+                        <Link to="/dashboard" className="btn btn-secondary">
+                            <LayoutDashboard size={18} />
+                            <span>View Dashboard</span>
+                        </Link>
+                        <button
+                            className="btn btn-ghost"
+                            onClick={() => {
+                                setCreated(false);
+                                setCreateResult(null);
+                                setCurrentStep(0);
+                                setFormData({
+                                    tokenAddress: '', tokenRate: '', tokenAmount: '',
+                                    softCap: '', hardCap: '', minBuy: '', maxBuy: '',
+                                    startBlockOffset: '', durationBlocks: '',
+                                });
+                            }}
+                        >
+                            <Plus size={18} />
+                            <span>Create Another</span>
+                        </button>
                     </div>
                 </div>
             </div>
