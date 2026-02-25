@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Rocket } from 'lucide-react';
 import './Footer.css';
 
 const Footer = () => {
@@ -13,9 +12,7 @@ const Footer = () => {
                 {/* Brand Column */}
                 <div className="footer-brand">
                     <div className="footer-logo">
-                        <div className="footer-logo-icon">
-                            <Rocket size={20} />
-                        </div>
+                        <img src="/logo.svg" alt="BitLaunch" className="footer-logo-img" />
                         <span className="footer-logo-text">BitLaunch</span>
                     </div>
                     <p className="footer-tagline">
@@ -41,25 +38,19 @@ const Footer = () => {
                 {/* Resources */}
                 <div className="footer-col">
                     <h4 className="footer-col-title">Resources</h4>
-                    <a href="#" className="footer-nav-link">Documentation</a>
-                    <a href="#" className="footer-nav-link">How It Works</a>
-                    <a href="#" className="footer-nav-link">FAQ</a>
-                    <a href="#" className="footer-nav-link">Support</a>
+                    <Link to="/#how-it-works" className="footer-nav-link">How It Works</Link>
+                    <a href="https://github.com/BitLaunchBTC/BitLaunch#readme" className="footer-nav-link" target="_blank" rel="noopener noreferrer">Documentation</a>
+                    <Link to="/#features" className="footer-nav-link">FAQ</Link>
+                    <a href="https://x.com/BitLaunchBTC" className="footer-nav-link" target="_blank" rel="noopener noreferrer">Support</a>
                 </div>
 
                 {/* Community */}
                 <div className="footer-col">
                     <h4 className="footer-col-title">Community</h4>
-                    <a href="#" className="footer-nav-link" target="_blank" rel="noopener noreferrer">
+                    <a href="https://x.com/BitLaunchBTC" className="footer-nav-link" target="_blank" rel="noopener noreferrer">
                         Twitter / X
                     </a>
-                    <a href="#" className="footer-nav-link" target="_blank" rel="noopener noreferrer">
-                        Discord
-                    </a>
-                    <a href="#" className="footer-nav-link" target="_blank" rel="noopener noreferrer">
-                        Telegram
-                    </a>
-                    <a href="#" className="footer-nav-link" target="_blank" rel="noopener noreferrer">
+                    <a href="https://github.com/BitLaunchBTC/BitLaunch" className="footer-nav-link" target="_blank" rel="noopener noreferrer">
                         GitHub
                     </a>
                 </div>

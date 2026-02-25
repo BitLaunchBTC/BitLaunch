@@ -43,15 +43,10 @@
     gap: 0.625rem;
 }
 
-.footer-logo-icon {
+.footer-logo-img {
     width: 36px;
     height: 36px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, var(--accent-orange), var(--accent-purple));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
+    object-fit: contain;
 }
 
 .footer-logo-text {
