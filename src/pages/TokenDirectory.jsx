@@ -25,8 +25,8 @@ const TokenDirectory = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [refreshing, setRefreshing] = useState(false);
 
-    const loadTokens = useCallback(async () => {
-        setLoading(true);
+    const loadTokens = useCallback(async (showSpinner = true) => {
+        if (showSpinner) setLoading(true);
         try {
             // Primary: fetch all token addresses directly from factory contract on-chain
             let addresses = [];
@@ -37,26 +37,27 @@ const TokenDirectory = () => {
                 addresses = getAllRegisteredTokens();
             }
 
-            // Fetch metadata for each token
-            const tokenList = [];
-            for (const addr of addresses) {
-                try {
-                    const info = await airdropService.fetchTokenInfo(addr);
-                    tokenList.push({
-                        address: addr,
-                        name: info.name || 'Unknown',
-                        symbol: info.symbol || '???',
-                        decimals: info.decimals || 8,
-                    });
-                } catch {
-                    tokenList.push({
-                        address: addr,
-                        name: 'Unknown',
-                        symbol: '???',
-                        decimals: 8,
-                    });
-                }
-            }
+            // Fetch metadata in parallel (much faster than sequential)
+            const tokenList = await Promise.all(
+                addresses.map(async (addr) => {
+                    try {
+                        const info = await airdropService.fetchTokenInfo(addr);
+                        return {
+                            address: addr,
+                            name: info.name || 'Unknown',
+                            symbol: info.symbol || '???',
+                            decimals: info.decimals || 8,
+                        };
+                    } catch {
+                        return {
+                            address: addr,
+                            name: 'Unknown',
+                            symbol: '???',
+                            decimals: 8,
+                        };
+                    }
+                })
+            );
 
             setTokens(tokenList);
 
@@ -73,7 +74,7 @@ const TokenDirectory = () => {
         setRefreshing(true);
         try {
             await factoryService.syncTokenRegistry(address || undefined);
-            await loadTokens();
+            await loadTokens(false); // don't show full-page spinner on refresh
             toast.success('Token list refreshed');
         } catch {
             toast.error('Failed to sync tokens');

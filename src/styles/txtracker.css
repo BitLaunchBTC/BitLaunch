@@ -174,14 +174,7 @@
     50% { opacity: 0.4; }
 }
 
-.spinning {
-    animation: spin360 1s linear infinite;
-}
-
-@keyframes spin360 {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
+/* spinning handled by theme.css — .spinning svg targets only the icon */
 
 /* Responsive */
 @media (max-width: 640px) {
