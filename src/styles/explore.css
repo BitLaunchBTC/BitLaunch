@@ -184,7 +184,9 @@
     gap: var(--spacing-lg);
     width: 100%;
     flex-wrap: wrap;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--spacing-2xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-subtle);
 }
 
 .search-container {
