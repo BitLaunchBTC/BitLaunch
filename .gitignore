@@ -46,3 +46,7 @@ skills/
 *.njsproj
 *.sln
 *.sw?
+
+.vercel
+DEMO_SCRIPT.md
+demo.mjs
