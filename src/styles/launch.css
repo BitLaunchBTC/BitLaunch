@@ -298,25 +298,7 @@
     font-size: 1.75rem;
     font-weight: 700;
     color: white;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 107, 0, 0.15);
-    position: relative;
-}
-
-/* Animated ring around preview icon */
-.preview-icon::after {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border-radius: calc(var(--radius-md) + 4px);
-    background: conic-gradient(from 0deg, var(--accent-orange), var(--accent-purple), var(--accent-orange));
-    z-index: -1;
-    opacity: 0.4;
-    animation: previewIconSpin 6s linear infinite;
-}
-
-@keyframes previewIconSpin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 .preview-info h3 {
@@ -373,28 +355,9 @@
 .cost-breakdown {
     margin-top: var(--spacing-xl);
     padding: var(--spacing-lg);
-    background: linear-gradient(135deg, rgba(255, 107, 0, 0.06), rgba(153, 69, 255, 0.04));
+    background: rgba(0, 0, 0, 0.25);
     border-radius: var(--radius-lg);
-    border: 1px solid rgba(255, 107, 0, 0.2);
-    position: relative;
-    overflow: hidden;
-}
-
-/* Subtle animated border glow */
-.cost-breakdown::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: var(--radius-lg);
-    background: conic-gradient(from 0deg, rgba(255, 107, 0, 0.3), transparent 30%, rgba(153, 69, 255, 0.3), transparent 60%, rgba(255, 107, 0, 0.3));
-    z-index: -1;
-    animation: costBorderSpin 8s linear infinite;
-    opacity: 0.5;
-}
-
-@keyframes costBorderSpin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    border: 1px solid rgba(255, 107, 0, 0.15);
 }
 
 .cost-header-row {
@@ -471,15 +434,14 @@
 }
 
 .cost-total {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     margin-top: var(--spacing-md);
     padding-top: var(--spacing-md);
     display: flex;
     justify-content: space-between;
     font-weight: 700;
-    font-size: 1.15rem;
-    color: var(--accent-orange);
-    letter-spacing: -0.01em;
+    font-size: 1.1rem;
+    color: var(--text-primary);
 }
 
 /* ==================== */
