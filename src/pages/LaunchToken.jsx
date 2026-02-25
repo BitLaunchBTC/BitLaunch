@@ -1,7 +1,7 @@
 // BitLaunch - Launch Token Page (V3 - Competition UI)
 // 4-step wizard: Token Info -> Settings -> Advanced (free mint + burn) -> Review
 // V3 changes: page hero, orbital spinner, confetti celebration, enhanced visuals
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useWallet } from '../contexts/WalletContext';
 import { useToast } from '../components/Toast';
@@ -14,7 +14,7 @@ import TxTracker from '../components/TxTracker';
 import {
     Rocket, Check, ExternalLink, ArrowLeft, ArrowRight,
     Coins, Settings, Zap, Eye, Wallet, Flame, Gift, Copy,
-    PartyPopper, LayoutDashboard, Plus, Share2
+    PartyPopper, LayoutDashboard, Plus, Share2, Fuel, Activity
 } from 'lucide-react';
 import '../styles/launch.css';
 
@@ -28,7 +28,35 @@ const LaunchToken = () => {
     const [deployResult, setDeployResult] = useState(null);
     const toast = useToast();
     const [errors, setErrors] = useState({});
+    const [gasInfo, setGasInfo] = useState(null);
     useScrollAnimation();
+
+    // Fetch real gas parameters when user reaches review step
+    useEffect(() => {
+        if (currentStep !== 3) return;
+        const fetchGas = async () => {
+            try {
+                const net = network || 'testnet';
+                const rpcUrl = net === 'mainnet'
+                    ? 'https://mainnet.opnet.org'
+                    : net === 'testnet'
+                        ? 'https://testnet.opnet.org'
+                        : 'https://regtest.opnet.org';
+                const res = await fetch(rpcUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ jsonrpc: '2.0', method: 'btc_gasParameters', id: 1, params: [] }),
+                });
+                const data = await res.json();
+                if (data.result?.bitcoin?.recommended) {
+                    setGasInfo(data.result.bitcoin.recommended);
+                }
+            } catch (e) {
+                console.warn('Gas fetch failed:', e.message);
+            }
+        };
+        fetchGas();
+    }, [currentStep, network]);
 
     const [formData, setFormData] = useState({
         // Step 1: Token Info
@@ -713,18 +741,44 @@ const LaunchToken = () => {
                                 )}
 
                                 <div className="cost-breakdown">
-                                    <h4 className="cost-header">Estimated Cost</h4>
+                                    <div className="cost-header-row">
+                                        <h4 className="cost-header"><Fuel size={16} /> Estimated Cost</h4>
+                                        {gasInfo && (
+                                            <span className="cost-live-badge">
+                                                <Activity size={12} /> LIVE
+                                            </span>
+                                        )}
+                                    </div>
                                     <div className="cost-row">
                                         <span className="cost-label">Network Fee</span>
-                                        <span>~5,000 sats</span>
+                                        <span className="cost-value">
+                                            {(() => {
+                                                const feeRate = 10; // sat/vB used by deployment
+                                                const estVBytes = 350; // typical deploy tx
+                                                const estFee = feeRate * estVBytes;
+                                                return `~${estFee.toLocaleString()} sats`;
+                                            })()}
+                                        </span>
                                     </div>
+                                    {gasInfo && (
+                                        <div className="cost-row cost-row--sub">
+                                            <span className="cost-label">Fee Rate</span>
+                                            <span className="cost-value cost-value--dim">
+                                                10 sat/vB (network: {parseFloat(gasInfo.medium).toFixed(1)} sat/vB)
+                                            </span>
+                                        </div>
+                                    )}
                                     <div className="cost-row">
                                         <span className="cost-label">Platform Fee</span>
-                                        <span>10,000 sats (0.0001 BTC)</span>
+                                        <span className="cost-value">10,000 sats <span className="cost-btc">(0.0001 BTC)</span></span>
+                                    </div>
+                                    <div className="cost-row cost-row--sub">
+                                        <span className="cost-label">Max Spend Limit</span>
+                                        <span className="cost-value cost-value--dim">100,000 sats</span>
                                     </div>
                                     <div className="cost-total">
-                                        <span>Total</span>
-                                        <span>~15,000 sats</span>
+                                        <span>Estimated Total</span>
+                                        <span>~{(10 * 350 + 10000).toLocaleString()} sats</span>
                                     </div>
                                 </div>
                             </div>
