@@ -1737,3 +1737,243 @@
         transform: translateY(0);
     }
 }
+
+/* ══════════════════════════════════════════════════
+   V3: Vesting & Protection Step
+   ══════════════════════════════════════════════════ */
+
+/* ── Form Section ── */
+.form-section {
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+}
+
+/* ── Toggle Row ── */
+.vesting-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: var(--spacing-xs) 0;
+    user-select: none;
+}
+
+.vesting-toggle-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.vesting-toggle-label {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.vesting-toggle-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    width: 48px;
+    height: 26px;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-subtle);
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.toggle-switch.active {
+    background: var(--accent-orange);
+    border-color: var(--accent-orange);
+    box-shadow: 0 0 12px rgba(255, 107, 0, 0.3);
+}
+
+.toggle-knob {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.toggle-switch.active .toggle-knob {
+    transform: translateX(22px);
+}
+
+/* ── Vesting Config (collapsible) ── */
+.vesting-config,
+.antibot-config {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-subtle);
+    animation: fadeSlideUp 0.3s ease-out;
+}
+
+/* ── Preset Grid ── */
+.preset-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+}
+
+.preset-card {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.preset-card:hover {
+    border-color: var(--border-light);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.preset-card.active {
+    border-color: var(--accent-orange);
+    background: rgba(255, 107, 0, 0.06);
+    box-shadow: 0 0 15px rgba(255, 107, 0, 0.1);
+}
+
+.preset-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.preset-card.active .preset-name {
+    color: var(--accent-orange);
+}
+
+.preset-desc {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* Disabled inputs when preset is selected */
+.vesting-config .form-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* ── Vesting Preview ── */
+.vesting-preview {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+}
+
+.vesting-preview-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-md);
+}
+
+.vesting-preview-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: 8px;
+}
+
+.vesting-preview-row:last-child {
+    margin-bottom: 0;
+}
+
+.vesting-preview-label {
+    width: 68px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-align: right;
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+}
+
+.vesting-preview-bar {
+    flex: 1;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.vesting-preview-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-orange), var(--accent-purple));
+    border-radius: 99px;
+    transition: width 0.5s ease;
+    box-shadow: 0 0 6px rgba(255, 107, 0, 0.2);
+}
+
+.vesting-preview-pct {
+    width: 36px;
+    text-align: right;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    flex-shrink: 0;
+}
+
+/* ── Review Section Headers ── */
+.review-section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.review-section-title svg {
+    color: var(--accent-orange);
+}
+
+.text-muted {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.ml-sm {
+    margin-left: var(--spacing-xs);
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+    .preset-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vesting-toggle-row {
+        gap: var(--spacing-md);
+    }
+
+    .vesting-preview-label {
+        width: 52px;
+        font-size: 0.72rem;
+    }
+}

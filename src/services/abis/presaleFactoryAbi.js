@@ -1,5 +1,5 @@
-// PresaleFactory V2 Contract ABI — matches PresaleFactory.ts on-chain methods
-// Block-based timing, multi-presale per creator, configurable fees
+// PresaleFactory V3 Contract ABI — matches PresaleFactory.ts on-chain methods
+// V3: createPresale() now includes vesting + anti-bot params (13-param)
 import { ABIDataTypes, BitcoinAbiTypes, OP_NET_ABI } from 'opnet';
 
 export const PRESALE_FACTORY_ABI = [
@@ -16,6 +16,10 @@ export const PRESALE_FACTORY_ABI = [
             { name: 'startBlock', type: ABIDataTypes.UINT256 },
             { name: 'endBlock', type: ABIDataTypes.UINT256 },
             { name: 'tokenAmount', type: ABIDataTypes.UINT256 },
+            { name: 'vestingCliff', type: ABIDataTypes.UINT256 },
+            { name: 'vestingDuration', type: ABIDataTypes.UINT256 },
+            { name: 'vestingTgeBps', type: ABIDataTypes.UINT256 },
+            { name: 'antiBotMaxPerBlock', type: ABIDataTypes.UINT256 },
         ],
         outputs: [{ name: 'presaleAddress', type: ABIDataTypes.ADDRESS }],
         type: BitcoinAbiTypes.Function,

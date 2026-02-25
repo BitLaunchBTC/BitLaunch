@@ -202,6 +202,10 @@ export interface IPresaleFactory extends IOP_NETContract {
         startBlock: bigint,
         endBlock: bigint,
         tokenAmount: bigint,
+        vestingCliff: bigint,
+        vestingDuration: bigint,
+        vestingTgeBps: bigint,
+        antiBotMaxPerBlock: bigint,
     ): Promise<CreatePresale>;
     pauseFactory(): Promise<PauseFactory>;
     unpauseFactory(): Promise<UnpauseFactory>;

@@ -1,6 +1,6 @@
-// BitLaunch - Presale Factory Service (V2)
+// BitLaunch - Presale Factory Service (V3)
 // Deploys new presale instances via the PresaleFactory contract
-// V2 changes: block-based timing, creator indexed lookups, configurable fees
+// V3 changes: vesting + anti-bot baked into createPresale (2-TX flow)
 
 /* global BigInt */
 
@@ -47,6 +47,10 @@ export const presaleFactoryService = {
      * @param {number} data.startBlock - V2: start block number
      * @param {number} data.endBlock - V2: end block number
      * @param {string} data.tokenAmount - total tokens to deposit
+     * @param {string} [data.vestingCliff] - V3: vesting cliff blocks ('0' = disabled)
+     * @param {string} [data.vestingDuration] - V3: vesting duration blocks ('0' = disabled)
+     * @param {string} [data.vestingTgeBps] - V3: TGE unlock in basis points ('0' = none)
+     * @param {string} [data.antiBotMaxPerBlock] - V3: max contributors per block ('0' = disabled)
      * @param {string} data.creator - creator wallet address (bech32)
      * @param {function} [onProgress] - optional progress callback
      */
@@ -70,6 +74,12 @@ export const presaleFactoryService = {
         const endBlock = BigInt(data.endBlock);
         const tokenAmount = BigInt(data.tokenAmount);
 
+        // V3: Vesting + anti-bot params (default to 0 = disabled)
+        const vestingCliff = BigInt(data.vestingCliff || '0');
+        const vestingDuration = BigInt(data.vestingDuration || '0');
+        const vestingTgeBps = BigInt(data.vestingTgeBps || '0');
+        const antiBotMaxPerBlock = BigInt(data.antiBotMaxPerBlock || '0');
+
         const creatorAddr = await resolveAddress(data.creator, false);
         const factoryAddr = await resolveAddress(CONTRACTS.presaleFactory, true);
 
@@ -87,6 +97,7 @@ export const presaleFactoryService = {
         const simulation = await factory.createPresale(
             tokenAddr, hardCap, softCap, rate,
             minBuy, maxBuy, startBlock, endBlock, tokenAmount,
+            vestingCliff, vestingDuration, vestingTgeBps, antiBotMaxPerBlock,
         );
         if (simulation.revert) {
             throw new Error(`Create presale failed: ${simulation.revert}`);

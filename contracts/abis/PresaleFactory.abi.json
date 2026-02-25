@@ -41,6 +41,22 @@
                 {
                     "name": "tokenAmount",
                     "type": "UINT256"
+                },
+                {
+                    "name": "vestingCliff",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "vestingDuration",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "vestingTgeBps",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "antiBotMaxPerBlock",
+                    "type": "UINT256"
                 }
             ],
             "outputs": [

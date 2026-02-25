@@ -389,6 +389,10 @@ export interface IPresaleContract extends IOP_NETContract {
         tokenAmount: bigint,
         feeBps: bigint,
         pullTokens: boolean,
+        vestingCliff: bigint,
+        vestingDuration: bigint,
+        vestingTgeBps: bigint,
+        antiBotMaxPerBlock: bigint,
     ): Promise<Initialize>;
     setVesting(cliffBlocks: bigint, durationBlocks: bigint, tgeBps: bigint): Promise<SetVesting>;
     setAntiBot(maxPerBlock: bigint): Promise<SetAntiBot>;

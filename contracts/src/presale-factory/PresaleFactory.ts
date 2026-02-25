@@ -36,9 +36,9 @@ import {
 import { encodeSelector } from '@btc-vision/btc-runtime/runtime/math/abi';
 import { ON_OP20_RECEIVED_SELECTOR } from '@btc-vision/btc-runtime/runtime/constants/Exports';
 
-// V2: Updated selector for PresaleContract V2's 13-param initialize
+// V3: Updated selector for PresaleContract V3's 17-param initialize (added vesting + anti-bot)
 const PRESALE_INITIALIZE_SELECTOR: u32 = encodeSelector(
-    'initialize(address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,bool)',
+    'initialize(address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,bool,uint256,uint256,uint256,uint256)',
 );
 
 // Default platform fee: 200 BPS = 2%
@@ -183,6 +183,10 @@ export class PresaleFactory extends OP_NET {
         { name: 'startBlock', type: ABIDataTypes.UINT256 },
         { name: 'endBlock', type: ABIDataTypes.UINT256 },
         { name: 'tokenAmount', type: ABIDataTypes.UINT256 },
+        { name: 'vestingCliff', type: ABIDataTypes.UINT256 },
+        { name: 'vestingDuration', type: ABIDataTypes.UINT256 },
+        { name: 'vestingTgeBps', type: ABIDataTypes.UINT256 },
+        { name: 'antiBotMaxPerBlock', type: ABIDataTypes.UINT256 },
     )
     @returns({ name: 'presaleAddress', type: ABIDataTypes.ADDRESS })
     @emit('PresaleDeployed')
@@ -216,6 +220,12 @@ export class PresaleFactory extends OP_NET {
         const tokenAmount: u256 = calldata.readU256();
         if (tokenAmount.isZero()) throw new Revert('Token amount must be > 0');
 
+        // V3: Read optional vesting + anti-bot params
+        const vestingCliff: u256 = calldata.readU256();
+        const vestingDuration: u256 = calldata.readU256();
+        const vestingTgeBps: u256 = calldata.readU256();
+        const antiBotMaxPerBlock: u256 = calldata.readU256();
+
         // Validate relationships
         if (softCap > hardCap) throw new Revert('Soft cap must be <= hard cap');
         if (startBlockVal >= endBlockVal) throw new Revert('Start must be before end');
@@ -242,11 +252,11 @@ export class PresaleFactory extends OP_NET {
         // ── Step 2: Transfer tokens from creator to presale clone ──
         TransferHelper.transferFrom(tokenAddr, creator, presaleAddr, tokenAmount);
 
-        // ── Step 3: Initialize the presale clone (V2: 13-param signature) ──
+        // ── Step 3: Initialize the presale clone (V3: 17-param signature) ──
         const initCalldataSize: u32 =
             4 +                          // selector
             ADDRESS_BYTE_LENGTH * 3 +    // creator, platformWallet, token
-            U256_BYTE_LENGTH * 9 +       // hardCap, softCap, rate, minBuy, maxBuy, startBlock, endBlock, tokenAmount, feeBps
+            U256_BYTE_LENGTH * 13 +      // 9 original + 4 new (vestingCliff, vestingDuration, vestingTgeBps, antiBotMaxPerBlock)
             1;                           // pullTokens (bool)
 
         const initCalldata: BytesWriter = new BytesWriter(initCalldataSize);
@@ -264,6 +274,10 @@ export class PresaleFactory extends OP_NET {
         initCalldata.writeU256(tokenAmount);
         initCalldata.writeU256(this.defaultFeeBps.value); // V2: configurable fee
         initCalldata.writeBoolean(false);             // pullTokens = false (already transferred)
+        initCalldata.writeU256(vestingCliff);           // V3: vesting cliff blocks (0 = disabled)
+        initCalldata.writeU256(vestingDuration);        // V3: vesting duration blocks (0 = disabled)
+        initCalldata.writeU256(vestingTgeBps);          // V3: TGE unlock % in BPS (0 = no TGE)
+        initCalldata.writeU256(antiBotMaxPerBlock);     // V3: max contributors per block (0 = disabled)
 
         Blockchain.call(presaleAddr, initCalldata);
 

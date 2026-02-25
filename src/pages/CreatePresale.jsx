@@ -1,12 +1,12 @@
-// BitLaunch - Create Presale (V2)
+// BitLaunch - Create Presale (V3)
 // Creates a new presale via the PresaleFactory contract.
-// V2 changes: block-based start/end, step wizard, anti-bot config
+// V3 changes: vesting + anti-bot baked into createPresale (2-TX flow)
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
     ArrowLeft, ArrowRight, Rocket, Info, Shield, ShoppingBag, Settings, Eye, Wallet,
     CheckCircle2, Loader, Clock, Search, FileCheck, Send, LayoutDashboard, Plus, PartyPopper,
-    AlertTriangle, RefreshCw
+    AlertTriangle, RefreshCw, Lock, Bot
 } from 'lucide-react';
 import useScrollAnimation from '../hooks/useScrollAnimation';
 import { presaleFactoryService } from '../services/PresaleFactoryService';
@@ -21,7 +21,14 @@ import TxTracker from '../components/TxTracker';
 import { blocksToHumanTime } from '../services/blockTime';
 import '../styles/presale.css';
 
-const STEPS = ['Token & Rates', 'Caps & Limits', 'Timing', 'Review'];
+const STEPS = ['Token & Rates', 'Caps & Limits', 'Timing', 'Vesting & Protection', 'Review'];
+
+const VESTING_PRESETS = {
+    light:    { tge: '10', cliff: '0',    duration: '1008',  label: '10% TGE, no cliff, ~7 days' },
+    standard: { tge: '10', cliff: '144',  duration: '4320',  label: '10% TGE, ~1 day cliff, ~30 days' },
+    strict:   { tge: '5',  cliff: '1008', duration: '12960', label: '5% TGE, ~7 day cliff, ~90 days' },
+    custom:   { tge: '',   cliff: '',     duration: '',      label: 'Set your own parameters' },
+};
 
 const CreatePresale = () => {
     const navigate = useNavigate();
@@ -65,6 +72,14 @@ const CreatePresale = () => {
         // Step 3: Timing (V2: block-based)
         startBlockOffset: '', // blocks from now
         durationBlocks: '',   // duration in blocks
+        // Step 4: Vesting & Protection (V3)
+        vestingEnabled: false,
+        vestingPreset: 'standard',
+        vestingTgePercent: '10',
+        vestingCliffBlocks: '144',
+        vestingDurationBlocks: '4320',
+        antiBotEnabled: false,
+        antiBotMaxPerBlock: '5',
     });
 
     const handleChange = useCallback((e) => {
@@ -74,6 +89,23 @@ const CreatePresale = () => {
             setErrors(prev => ({ ...prev, [name]: null }));
         }
     }, [errors]);
+
+    const handleToggle = useCallback((field) => {
+        setFormData(prev => ({ ...prev, [field]: !prev[field] }));
+    }, []);
+
+    const selectPreset = useCallback((key) => {
+        const preset = VESTING_PRESETS[key];
+        setFormData(prev => ({
+            ...prev,
+            vestingPreset: key,
+            ...(key !== 'custom' ? {
+                vestingTgePercent: preset.tge,
+                vestingCliffBlocks: preset.cliff,
+                vestingDurationBlocks: preset.duration,
+            } : {}),
+        }));
+    }, []);
 
     const validateStep = (step) => {
         const newErrors = {};
@@ -116,6 +148,20 @@ const CreatePresale = () => {
         if (step === 2) {
             if (!formData.durationBlocks || parseFloat(formData.durationBlocks) <= 0) {
                 newErrors.durationBlocks = 'Duration is required';
+            }
+        }
+
+        if (step === 3) {
+            // Vesting & Protection — validate only when enabled
+            if (formData.vestingEnabled) {
+                const tge = parseFloat(formData.vestingTgePercent || 0);
+                const dur = parseFloat(formData.vestingDurationBlocks || 0);
+                if (dur <= 0) newErrors.vestingDurationBlocks = 'Vesting duration must be > 0';
+                if (tge < 0 || tge > 100) newErrors.vestingTgePercent = 'TGE must be 0–100%';
+            }
+            if (formData.antiBotEnabled) {
+                const max = parseFloat(formData.antiBotMaxPerBlock || 0);
+                if (max <= 0) newErrors.antiBotMaxPerBlock = 'Max per block must be > 0';
             }
         }
 
@@ -230,6 +276,11 @@ const CreatePresale = () => {
                 maxBuy: formData.maxBuy || '10000000',
                 startBlock,
                 endBlock,
+                // V3: Vesting + anti-bot (default '0' = disabled)
+                vestingCliff: formData.vestingEnabled ? formData.vestingCliffBlocks : '0',
+                vestingDuration: formData.vestingEnabled ? formData.vestingDurationBlocks : '0',
+                vestingTgeBps: formData.vestingEnabled ? String(Number(formData.vestingTgePercent) * 100) : '0',
+                antiBotMaxPerBlock: formData.antiBotEnabled ? formData.antiBotMaxPerBlock : '0',
                 creator: address,
             }, (msg) => setLoadingMessage(msg));
 
@@ -453,6 +504,18 @@ const CreatePresale = () => {
                                 <span className="deploy-info-label">Duration</span>
                                 <span className="deploy-info-value">{durationBlocks > 0 ? blocksToHumanTime(durationBlocks) : '\u2014'}</span>
                             </div>
+                            {formData.vestingEnabled && (
+                                <div className="deploy-info-item">
+                                    <span className="deploy-info-label">Vesting</span>
+                                    <span className="deploy-info-value">{formData.vestingTgePercent}% TGE + {blocksToHumanTime(parseInt(formData.vestingDurationBlocks || 0))}</span>
+                                </div>
+                            )}
+                            {formData.antiBotEnabled && (
+                                <div className="deploy-info-item">
+                                    <span className="deploy-info-label">Anti-Bot</span>
+                                    <span className="deploy-info-value">{formData.antiBotMaxPerBlock}/block</span>
+                                </div>
+                            )}
                         </div>
                     </div>
 
@@ -536,6 +599,10 @@ const CreatePresale = () => {
                                     tokenAddress: '', tokenRate: '', tokenAmount: '',
                                     softCap: '', hardCap: '', minBuy: '', maxBuy: '',
                                     startBlockOffset: '', durationBlocks: '',
+                                    vestingEnabled: false, vestingPreset: 'standard',
+                                    vestingTgePercent: '10', vestingCliffBlocks: '144',
+                                    vestingDurationBlocks: '4320',
+                                    antiBotEnabled: false, antiBotMaxPerBlock: '5',
                                 });
                             }}
                         >
@@ -791,8 +858,191 @@ const CreatePresale = () => {
                         </>
                     )}
 
-                    {/* Step 4: Review */}
+                    {/* Step 4: Vesting & Protection (V3) */}
                     {currentStep === 3 && (
+                        <>
+                            <div className="wizard-card-header">
+                                <h2><Lock size={24} className="header-icon" /> Vesting & Protection</h2>
+                                <p>Prevent token dumps and protect your presale from bots</p>
+                            </div>
+
+                            {/* ── Section A: Token Vesting ── */}
+                            <div className="form-section">
+                                <div className="vesting-toggle-row" onClick={() => handleToggle('vestingEnabled')}>
+                                    <div className="vesting-toggle-info">
+                                        <span className="vesting-toggle-label">Token Vesting</span>
+                                        <span className="vesting-toggle-desc">Contributors receive tokens gradually over time</span>
+                                    </div>
+                                    <div className={`toggle-switch ${formData.vestingEnabled ? 'active' : ''}`}>
+                                        <div className="toggle-knob" />
+                                    </div>
+                                </div>
+
+                                {formData.vestingEnabled && (
+                                    <div className="vesting-config">
+                                        {/* Preset cards */}
+                                        <div className="preset-grid">
+                                            {Object.entries(VESTING_PRESETS).map(([key, preset]) => (
+                                                <div
+                                                    key={key}
+                                                    className={`preset-card ${formData.vestingPreset === key ? 'active' : ''}`}
+                                                    onClick={() => selectPreset(key)}
+                                                >
+                                                    <strong className="preset-name">{key.charAt(0).toUpperCase() + key.slice(1)}</strong>
+                                                    <span className="preset-desc">{preset.label}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Manual inputs */}
+                                        <div className="grid-2" style={{ marginTop: 'var(--spacing-lg)' }}>
+                                            <div className="form-group">
+                                                <label className="form-label">TGE Unlock %</label>
+                                                <input
+                                                    type="number"
+                                                    name="vestingTgePercent"
+                                                    className={`form-input ${errors.vestingTgePercent ? 'error' : ''}`}
+                                                    placeholder="e.g. 10"
+                                                    value={formData.vestingTgePercent}
+                                                    onChange={(e) => {
+                                                        handleChange(e);
+                                                        setFormData(prev => ({ ...prev, vestingPreset: 'custom' }));
+                                                    }}
+                                                    min="0"
+                                                    max="100"
+                                                    disabled={formData.vestingPreset !== 'custom'}
+                                                />
+                                                <div className="form-hint">Tokens unlocked immediately at TGE</div>
+                                                {errors.vestingTgePercent && <div className="form-error">{errors.vestingTgePercent}</div>}
+                                            </div>
+                                            <div className="form-group">
+                                                <label className="form-label">Cliff (blocks)</label>
+                                                <input
+                                                    type="number"
+                                                    name="vestingCliffBlocks"
+                                                    className="form-input"
+                                                    placeholder="e.g. 144"
+                                                    value={formData.vestingCliffBlocks}
+                                                    onChange={(e) => {
+                                                        handleChange(e);
+                                                        setFormData(prev => ({ ...prev, vestingPreset: 'custom' }));
+                                                    }}
+                                                    min="0"
+                                                    disabled={formData.vestingPreset !== 'custom'}
+                                                />
+                                                <div className="form-hint">
+                                                    Wait period before vesting starts
+                                                    {parseInt(formData.vestingCliffBlocks) > 0 && (
+                                                        <> ({blocksToHumanTime(parseInt(formData.vestingCliffBlocks))})</>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="form-group" style={{ marginTop: 'var(--spacing-md)' }}>
+                                            <label className="form-label">Vesting Duration (blocks) <span className="required">*</span></label>
+                                            <input
+                                                type="number"
+                                                name="vestingDurationBlocks"
+                                                className={`form-input ${errors.vestingDurationBlocks ? 'error' : ''}`}
+                                                placeholder="e.g. 4320"
+                                                value={formData.vestingDurationBlocks}
+                                                onChange={(e) => {
+                                                    handleChange(e);
+                                                    setFormData(prev => ({ ...prev, vestingPreset: 'custom' }));
+                                                }}
+                                                min="1"
+                                                disabled={formData.vestingPreset !== 'custom'}
+                                            />
+                                            <div className="form-hint">
+                                                Linear release period after cliff
+                                                {parseInt(formData.vestingDurationBlocks) > 0 && (
+                                                    <> ({blocksToHumanTime(parseInt(formData.vestingDurationBlocks))})</>
+                                                )}
+                                            </div>
+                                            {errors.vestingDurationBlocks && <div className="form-error">{errors.vestingDurationBlocks}</div>}
+                                        </div>
+
+                                        {/* Vesting Preview */}
+                                        <div className="vesting-preview">
+                                            <div className="vesting-preview-title">Unlock Schedule</div>
+                                            {(() => {
+                                                const tge = parseFloat(formData.vestingTgePercent) || 0;
+                                                const cliff = parseInt(formData.vestingCliffBlocks) || 0;
+                                                const dur = parseInt(formData.vestingDurationBlocks) || 0;
+                                                const total = cliff + dur;
+                                                const milestones = [
+                                                    { label: 'TGE', pct: Math.min(tge, 100) },
+                                                    ...(cliff > 0 ? [{ label: blocksToHumanTime(cliff), pct: Math.min(tge, 100) }] : []),
+                                                    ...(dur > 0 ? [
+                                                        { label: blocksToHumanTime(Math.round(cliff + dur * 0.25)), pct: Math.min(tge + (100 - tge) * 0.25, 100) },
+                                                        { label: blocksToHumanTime(Math.round(cliff + dur * 0.5)), pct: Math.min(tge + (100 - tge) * 0.5, 100) },
+                                                        { label: blocksToHumanTime(total), pct: 100 },
+                                                    ] : []),
+                                                ];
+                                                return milestones.map((m, i) => (
+                                                    <div key={i} className="vesting-preview-row">
+                                                        <span className="vesting-preview-label">{m.label}</span>
+                                                        <div className="vesting-preview-bar">
+                                                            <div className="vesting-preview-fill" style={{ width: `${m.pct}%` }} />
+                                                        </div>
+                                                        <span className="vesting-preview-pct">{Math.round(m.pct)}%</span>
+                                                    </div>
+                                                ));
+                                            })()}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* ── Section B: Anti-Bot Protection ── */}
+                            <div className="form-section" style={{ marginTop: 'var(--spacing-xl)' }}>
+                                <div className="vesting-toggle-row" onClick={() => handleToggle('antiBotEnabled')}>
+                                    <div className="vesting-toggle-info">
+                                        <span className="vesting-toggle-label">Anti-Bot Protection</span>
+                                        <span className="vesting-toggle-desc">Limit contributors per block to prevent sniping</span>
+                                    </div>
+                                    <div className={`toggle-switch ${formData.antiBotEnabled ? 'active' : ''}`}>
+                                        <div className="toggle-knob" />
+                                    </div>
+                                </div>
+
+                                {formData.antiBotEnabled && (
+                                    <div className="antibot-config">
+                                        <div className="form-group">
+                                            <label className="form-label">Max Contributors Per Block</label>
+                                            <input
+                                                type="number"
+                                                name="antiBotMaxPerBlock"
+                                                className={`form-input ${errors.antiBotMaxPerBlock ? 'error' : ''}`}
+                                                placeholder="e.g. 5"
+                                                value={formData.antiBotMaxPerBlock}
+                                                onChange={handleChange}
+                                                min="1"
+                                            />
+                                            <div className="form-hint">
+                                                Only this many wallets can contribute in a single block (~10 min window)
+                                            </div>
+                                            {errors.antiBotMaxPerBlock && <div className="form-error">{errors.antiBotMaxPerBlock}</div>}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {!formData.vestingEnabled && !formData.antiBotEnabled && (
+                                <div className="info-banner" style={{ marginTop: 'var(--spacing-lg)' }}>
+                                    <Info size={16} />
+                                    <span>
+                                        Both features are optional. You can skip this step and create a basic presale
+                                        without vesting or anti-bot protection.
+                                    </span>
+                                </div>
+                            )}
+                        </>
+                    )}
+
+                    {/* Step 5: Review */}
+                    {currentStep === 4 && (
                         <>
                             <div className="wizard-card-header">
                                 <h2><Eye size={24} className="header-icon" /> Review & Create</h2>
@@ -841,6 +1091,60 @@ const CreatePresale = () => {
                                     <span className="info-value">{durationBlocks > 0 ? blocksToHumanTime(durationBlocks) : '\u2014'}</span>
                                 </div>
                             </div>
+
+                            {/* Vesting review */}
+                            {formData.vestingEnabled && (
+                                <div className="review-section" style={{ marginTop: 'var(--spacing-lg)' }}>
+                                    <h4 className="review-section-title">
+                                        <Lock size={16} /> Token Vesting
+                                    </h4>
+                                    <div className="info-table">
+                                        <div className="info-row">
+                                            <span className="info-label">TGE Unlock</span>
+                                            <span className="info-value">{formData.vestingTgePercent}%</span>
+                                        </div>
+                                        <div className="info-row">
+                                            <span className="info-label">Cliff Period</span>
+                                            <span className="info-value">
+                                                {formData.vestingCliffBlocks} blocks
+                                                {parseInt(formData.vestingCliffBlocks) > 0 && (
+                                                    <span className="text-muted ml-sm">({blocksToHumanTime(parseInt(formData.vestingCliffBlocks))})</span>
+                                                )}
+                                            </span>
+                                        </div>
+                                        <div className="info-row">
+                                            <span className="info-label">Vesting Duration</span>
+                                            <span className="info-value">
+                                                {formData.vestingDurationBlocks} blocks
+                                                {parseInt(formData.vestingDurationBlocks) > 0 && (
+                                                    <span className="text-muted ml-sm">({blocksToHumanTime(parseInt(formData.vestingDurationBlocks))})</span>
+                                                )}
+                                            </span>
+                                        </div>
+                                        <div className="info-row">
+                                            <span className="info-label">Full Vest</span>
+                                            <span className="info-value">
+                                                {blocksToHumanTime(parseInt(formData.vestingCliffBlocks || 0) + parseInt(formData.vestingDurationBlocks || 0))} after presale ends
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Anti-bot review */}
+                            {formData.antiBotEnabled && (
+                                <div className="review-section" style={{ marginTop: 'var(--spacing-lg)' }}>
+                                    <h4 className="review-section-title">
+                                        <Bot size={16} /> Anti-Bot Protection
+                                    </h4>
+                                    <div className="info-table">
+                                        <div className="info-row">
+                                            <span className="info-label">Max Per Block</span>
+                                            <span className="info-value">{formData.antiBotMaxPerBlock} contributors</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
 
                             <div className="cost-breakdown" style={{ marginTop: 'var(--spacing-xl)' }}>
                                 <h4 className="cost-header">Estimated Cost</h4>

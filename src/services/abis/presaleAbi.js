@@ -1,5 +1,5 @@
-// Presale V2 Contract ABI — matches PresaleContract.ts on-chain methods
-// Block-based timing (startBlock/endBlock instead of timestamps)
+// Presale V3 Contract ABI — matches PresaleContract.ts on-chain methods
+// V3: initialize() now includes vesting + anti-bot params (17-param)
 import { ABIDataTypes, BitcoinAbiTypes, OP_NET_ABI } from 'opnet';
 
 export const PRESALE_ABI = [
@@ -20,6 +20,10 @@ export const PRESALE_ABI = [
             { name: 'tokenAmount', type: ABIDataTypes.UINT256 },
             { name: 'feeBps', type: ABIDataTypes.UINT256 },
             { name: 'pullTokens', type: ABIDataTypes.BOOL },
+            { name: 'vestingCliff', type: ABIDataTypes.UINT256 },
+            { name: 'vestingDuration', type: ABIDataTypes.UINT256 },
+            { name: 'vestingTgeBps', type: ABIDataTypes.UINT256 },
+            { name: 'antiBotMaxPerBlock', type: ABIDataTypes.UINT256 },
         ],
         outputs: [{ name: 'success', type: ABIDataTypes.BOOL }],
         type: BitcoinAbiTypes.Function,

@@ -275,6 +275,10 @@ export class PresaleContract extends ReentrancyGuard {
         { name: 'tokenAmount', type: ABIDataTypes.UINT256 },
         { name: 'feeBps', type: ABIDataTypes.UINT256 },
         { name: 'pullTokens', type: ABIDataTypes.BOOL },
+        { name: 'vestingCliff', type: ABIDataTypes.UINT256 },
+        { name: 'vestingDuration', type: ABIDataTypes.UINT256 },
+        { name: 'vestingTgeBps', type: ABIDataTypes.UINT256 },
+        { name: 'antiBotMaxPerBlock', type: ABIDataTypes.UINT256 },
     )
     @returns({ name: 'success', type: ABIDataTypes.BOOL })
     @emit('PresaleCreated')
@@ -349,6 +353,26 @@ export class PresaleContract extends ReentrancyGuard {
                 Blockchain.contract.address,
                 tokenAmount,
             );
+        }
+
+        // V3: Optional vesting setup (skip if all zeros)
+        const vCliff: u256 = calldata.readU256();
+        const vDuration: u256 = calldata.readU256();
+        const vTgeBps: u256 = calldata.readU256();
+
+        if (!vDuration.isZero() || !vCliff.isZero() || !vTgeBps.isZero()) {
+            if (vDuration.isZero()) throw new Revert('Vesting duration must be > 0');
+            if (vTgeBps > BPS_DENOMINATOR) throw new Revert('TGE BPS must be <= 10000');
+            this.vestingEnabled.value = true;
+            this.vestingCliff.value = vCliff;
+            this.vestingDuration.value = vDuration;
+            this.vestingTgeBps.value = vTgeBps;
+        }
+
+        // V3: Optional anti-bot setup (skip if zero)
+        const abMax: u256 = calldata.readU256();
+        if (!abMax.isZero()) {
+            this.antiBotMaxPerBlock.value = abMax;
         }
 
         this.emitEvent(new PresaleCreatedEvent(creatorAddr, tokenAddr, hardCapVal, softCapVal));
