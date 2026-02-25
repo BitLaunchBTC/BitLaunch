@@ -39,6 +39,10 @@
     backdrop-filter: blur(12px);
     overflow: hidden;
     position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 0 rgba(255, 107, 0, 0);
+    display: flex;
+    flex-direction: column;
+    min-height: 220px;
 }
 
 /* Status-colored gradient top bar */
@@ -64,10 +68,48 @@
     background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
 }
 
+/* Card hover — default orange glow */
 .presale-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(255, 107, 0, 0.15);
+    border-color: rgba(255, 107, 0, 0.3);
+}
+
+/* LIVE hover — green glow */
+.presale-card:has(.presale-status.live):hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(20, 241, 149, 0.2);
+    border-color: rgba(20, 241, 149, 0.25);
+}
+
+/* UPCOMING hover — purple glow */
+.presale-card:has(.presale-status.upcoming):hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(153, 69, 255, 0.2);
+    border-color: rgba(153, 69, 255, 0.25);
+}
+
+/* ENDED / FILLED hover — subtle white */
+.presale-card:has(.presale-status.ended):hover,
+.presale-card:has(.presale-status.filled):hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.05);
     border-color: var(--border-light);
+}
+
+/* Card shine sweep on hover */
+.presale-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+    transition: left 0.6s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+    pointer-events: none;
+    z-index: 1;
+}
+
+.presale-card:hover::after {
+    left: 150%;
 }
 
 /* Main Presale Section (Detail Page) */
@@ -276,7 +318,14 @@
     }
 }
 
-/* Presale List Card styles (retained) */
+/* Presale List Card styles */
+.presale-card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
 .presale-token-icon {
     width: 48px;
     height: 48px;
@@ -286,7 +335,42 @@
     align-items: center;
     justify-content: center;
     font-weight: 700;
+    font-size: 0.85rem;
     color: white;
+    position: relative;
+    flex-shrink: 0;
+}
+
+/* Animated gradient ring */
+.presale-token-icon::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, var(--accent-orange), var(--accent-purple), var(--accent-orange));
+    z-index: -1;
+    opacity: 0.5;
+    animation: iconRingSpin 6s linear infinite;
+}
+
+@keyframes iconRingSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.presale-token-info {
+    flex: 1;
+}
+
+.presale-token-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.presale-token-symbol {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
 }
 
 .presale-status {
@@ -296,6 +380,8 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    display: inline-flex;
+    align-items: center;
 }
 
 .presale-status.live {
@@ -316,66 +402,27 @@
     border: 1px solid var(--border-subtle);
 }
 
-.presale-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    border-color: var(--accent-orange);
+.presale-status.filled {
+    background: rgba(255, 107, 0, 0.12);
+    color: var(--accent-orange);
+    border: 1px solid rgba(255, 107, 0, 0.2);
 }
 
-.presale-card-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.presale-token-icon {
-    width: 40px;
-    height: 40px;
+/* LIVE pulse dot */
+.live-pulse-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent-orange), var(--accent-purple));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    color: white;
+    background: var(--accent-green);
+    box-shadow: 0 0 6px var(--accent-green);
+    margin-right: 6px;
+    animation: livePulse 2s ease-in-out infinite;
 }
 
-.presale-token-info {
-    flex: 1;
-}
-
-.presale-token-name {
-    font-weight: 600;
-    font-size: 1.1rem;
-}
-
-.presale-token-symbol {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-}
-
-.presale-status {
-    padding: 0.25rem 0.75rem;
-    border-radius: 99px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.presale-status.live {
-    background: rgba(20, 241, 149, 0.2);
-    color: var(--accent-green);
-}
-
-.presale-status.upcoming {
-    background: rgba(234, 179, 8, 0.2);
-    color: var(--accent-yellow);
-}
-
-.presale-status.ended {
-    background: rgba(133, 133, 149, 0.2);
-    color: var(--text-muted);
+@keyframes livePulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--accent-green); }
+    50% { opacity: 0.4; box-shadow: 0 0 2px var(--accent-green); }
 }
 
 /* Progress Bar */
@@ -400,18 +447,35 @@
 }
 
 .progress-bar {
-    height: 8px;
-    background: var(--bg-tertiary);
-    border-radius: 4px;
-    overflow: hidden;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: var(--radius-full);
+    overflow: visible;
     position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--accent-orange), var(--accent-pink));
-    border-radius: 4px;
-    transition: width 0.3s ease;
+    background: linear-gradient(90deg, var(--accent-orange), var(--accent-pink, #ff6b9d));
+    border-radius: var(--radius-full);
+    transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 0 12px rgba(255, 107, 0, 0.3);
+    position: relative;
+}
+
+/* Glow dot at fill edge */
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    right: -1px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 8px var(--accent-orange), 0 0 16px rgba(255, 107, 0, 0.3);
 }
 
 .progress-markers {
@@ -431,10 +495,11 @@
 /* Stats */
 .presale-stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
     padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-subtle);
+    margin-top: auto;
 }
 
 .presale-stat {
@@ -445,11 +510,43 @@
     font-weight: 600;
     font-size: 0.9rem;
     margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .presale-stat-label {
     font-size: 0.75rem;
     color: var(--text-muted);
+}
+
+/* Stat icon colors */
+.stat-icon {
+    flex-shrink: 0;
+}
+
+.stat-icon.orange {
+    color: var(--accent-orange);
+}
+
+.stat-icon.muted {
+    color: var(--text-muted);
+}
+
+/* Raised value highlight */
+.stat-raised {
+    color: var(--accent-orange);
+}
+
+/* Progress percentage label */
+.progress-pct {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent-orange);
+    text-align: right;
+    margin-top: 4px;
+    font-family: var(--font-mono);
 }
 
 /* V2: Create presale header */

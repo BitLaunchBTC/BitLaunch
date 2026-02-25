@@ -3,6 +3,7 @@
 // Links to /presale/:address (the presale contract address).
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { TrendingUp, Clock } from 'lucide-react';
 import { presaleService } from '../../services/PresaleService';
 import '../../styles/presale.css';
 
@@ -32,6 +33,7 @@ const PresaleCard = ({ presale }) => {
                         <div className="presale-token-symbol">{tokenLabel}</div>
                     </div>
                     <div className={`presale-status ${presale.status}`}>
+                        {presale.status === 'live' && <span className="live-pulse-dot" />}
                         {presale.status}
                     </div>
                 </div>
@@ -55,18 +57,21 @@ const PresaleCard = ({ presale }) => {
                             />
                         )}
                     </div>
+                    <div className="progress-pct">{progressPct.toFixed(0)}%</div>
                 </div>
 
                 {/* Stats */}
                 <div className="presale-stats">
                     <div className="presale-stat">
                         <div className="presale-stat-value">
-                            {raised.toLocaleString()}
+                            <TrendingUp size={14} className="stat-icon orange" />
+                            <span className="stat-raised">{raised.toLocaleString()}</span>
                         </div>
                         <div className="presale-stat-label">Raised (sats)</div>
                     </div>
                     <div className="presale-stat">
                         <div className="presale-stat-value">
+                            <Clock size={14} className="stat-icon muted" />
                             {presale.status === 'upcoming'
                                 ? presaleService.formatTimeRemaining(presale.startTime)
                                 : presaleService.formatTimeRemaining(presale.endTime)
