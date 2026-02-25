@@ -1,4 +1,4 @@
-/* Token Directory Styles (V3 - Competition UI) */
+/* Token Directory Styles (V4 - Polished) */
 .directory-page {
     padding-bottom: var(--spacing-3xl);
     min-height: 100vh;
@@ -9,7 +9,7 @@
 }
 
 .directory-container {
-    max-width: 1200px;
+    max-width: 1280px;
     margin: 0 auto;
     padding: 0 var(--spacing-lg);
 }
@@ -38,6 +38,8 @@
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-xl);
     align-items: center;
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-subtle);
 }
 
 .directory-search {
@@ -72,14 +74,14 @@
     outline: none;
 }
 
-/* Token Grid */
+/* ── Token Grid ── */
 .token-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: var(--spacing-md);
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: var(--spacing-lg);
 }
 
-/* Stagger entrance for token cards */
+/* Stagger entrance */
 .token-grid > * {
     animation: tokenCardEnter 0.45s ease-out backwards;
 }
@@ -89,45 +91,74 @@
 .token-grid > *:nth-child(4) { animation-delay: 0.15s; }
 .token-grid > *:nth-child(5) { animation-delay: 0.19s; }
 .token-grid > *:nth-child(6) { animation-delay: 0.23s; }
+.token-grid > *:nth-child(7) { animation-delay: 0.27s; }
+.token-grid > *:nth-child(8) { animation-delay: 0.31s; }
+.token-grid > *:nth-child(9) { animation-delay: 0.35s; }
 
 @keyframes tokenCardEnter {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(18px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+/* ── Card ── */
 .token-dir-card {
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
     padding: var(--spacing-lg);
+    padding-top: calc(var(--spacing-lg) + 3px);
     transition: all 0.35s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    cursor: default;
 }
 
-/* Gradient top accent */
+/* Orange gradient top bar */
 .token-dir-card::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 2px;
-    background: var(--gradient-primary, linear-gradient(135deg, #ff6b00, #ffaa33));
-    opacity: 0;
+    height: 3px;
+    background: linear-gradient(135deg, var(--accent-orange), var(--accent-amber));
+    opacity: 0.7;
     transition: opacity 0.35s ease;
 }
 
+/* Shine sweep on hover */
+.token-dir-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+    transition: left 0.6s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+    pointer-events: none;
+    z-index: 1;
+}
+
 .token-dir-card:hover {
-    border-color: rgba(255, 107, 0, 0.2);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
-    transform: translateY(-3px);
+    transform: translateY(-4px);
+    border-color: rgba(255, 107, 0, 0.25);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35), 0 0 30px rgba(255, 107, 0, 0.12);
 }
 
 .token-dir-card:hover::before {
     opacity: 1;
 }
 
+.token-dir-card:hover::after {
+    left: 150%;
+}
+
+/* ── Card Header ── */
 .token-dir-header {
     display: flex;
     align-items: center;
@@ -135,30 +166,131 @@
     margin-bottom: var(--spacing-md);
 }
 
+/* Token Icon — larger with animated ring */
+.token-dir-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-orange), var(--accent-purple));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    color: white;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.token-dir-icon::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, var(--accent-orange), var(--accent-purple), var(--accent-orange));
+    z-index: -1;
+    opacity: 0.45;
+    animation: tokenIconSpin 6s linear infinite;
+}
+
+@keyframes tokenIconSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* Token Info */
 .token-dir-info {
     flex: 1;
     min-width: 0;
 }
 
-.token-dir-address {
-    padding: var(--spacing-sm) 0;
-    border-top: 1px solid var(--border-subtle);
-    border-bottom: 1px solid var(--border-subtle);
-    margin-bottom: var(--spacing-sm);
+.token-dir-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
+.token-dir-symbol {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    margin-top: 2px;
+}
+
+/* OP20 Badge */
+.token-dir-badge {
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: rgba(255, 107, 0, 0.1);
+    color: var(--accent-orange);
+    border: 1px solid rgba(255, 107, 0, 0.15);
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+/* ── Card Body ── */
+.token-dir-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.token-dir-address {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    margin-bottom: var(--spacing-md);
+}
+
+/* ── Meta Row ── */
 .token-dir-meta {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.directory-footer {
-    padding-top: var(--spacing-lg);
+    gap: var(--spacing-md);
+    margin-top: auto;
+    padding-top: var(--spacing-sm);
     border-top: 1px solid var(--border-subtle);
 }
 
-/* Gradient icon variants */
+.token-dir-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.token-dir-meta-item svg {
+    color: var(--accent-orange);
+    opacity: 0.7;
+}
+
+.token-dir-meta-item span {
+    color: var(--text-muted);
+}
+
+.token-dir-meta-item strong {
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-family: var(--font-mono);
+}
+
+/* ── Footer ── */
+.directory-footer {
+    padding-top: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-subtle);
+}
+
+/* Gradient icon variants (kept for compatibility) */
 .bg-gradient-orange {
     background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
 }
@@ -167,6 +299,7 @@
     background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
 }
 
+/* ── Responsive ── */
 @media (max-width: 640px) {
     .directory-toolbar {
         flex-direction: column;
@@ -178,5 +311,10 @@
 
     .directory-header h1 {
         font-size: 2rem;
+    }
+
+    .token-dir-meta {
+        flex-direction: column;
+        gap: var(--spacing-xs);
     }
 }

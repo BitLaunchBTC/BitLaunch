@@ -11,7 +11,7 @@ import { opnetProvider } from '../services/opnetProvider';
 import { getAllRegisteredTokens } from '../services/tokenRegistry';
 import EmptyState from '../components/EmptyState';
 import AddressDisplay from '../components/AddressDisplay';
-import { Coins, Search, ArrowLeft, ExternalLink, Copy, RefreshCw } from 'lucide-react';
+import { Coins, Search, ArrowLeft, ExternalLink, Copy, RefreshCw, Hash, Layers } from 'lucide-react';
 import useScrollAnimation from '../hooks/useScrollAnimation';
 import '../styles/directory.css';
 
@@ -166,25 +166,37 @@ const TokenDirectory = () => {
                         {filteredTokens.map((token, i) => (
                             <div key={token.address || i} className="token-dir-card">
                                 <div className="token-dir-header">
-                                    <div className="token-icon-sm bg-gradient-orange">
+                                    <div className="token-dir-icon">
                                         {(token.symbol || '?')[0]}
                                     </div>
                                     <div className="token-dir-info">
-                                        <div className="font-bold">{token.name}</div>
-                                        <div className="text-sm text-muted">{token.symbol}</div>
+                                        <div className="token-dir-name">{token.name}</div>
+                                        <div className="token-dir-symbol">{token.symbol}</div>
                                     </div>
+                                    <span className="token-dir-badge">OP20</span>
                                 </div>
-                                <div className="token-dir-address">
-                                    <AddressDisplay
-                                        address={token.address}
-                                        truncate={true}
-                                        copyable={true}
-                                        startChars={12}
-                                        endChars={6}
-                                    />
-                                </div>
-                                <div className="token-dir-meta">
-                                    <span className="text-xs text-muted">Decimals: {token.decimals}</span>
+                                <div className="token-dir-body">
+                                    <div className="token-dir-address">
+                                        <AddressDisplay
+                                            address={token.address}
+                                            truncate={true}
+                                            copyable={true}
+                                            startChars={14}
+                                            endChars={8}
+                                        />
+                                    </div>
+                                    <div className="token-dir-meta">
+                                        <div className="token-dir-meta-item">
+                                            <Layers size={13} />
+                                            <span>Decimals</span>
+                                            <strong>{token.decimals}</strong>
+                                        </div>
+                                        <div className="token-dir-meta-item">
+                                            <Hash size={13} />
+                                            <span>Standard</span>
+                                            <strong>OP_20</strong>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         ))}
