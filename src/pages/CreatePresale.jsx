@@ -5,7 +5,8 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
     ArrowLeft, ArrowRight, Rocket, Info, Shield, ShoppingBag, Settings, Eye, Wallet,
-    CheckCircle2, Loader, Clock, Search, FileCheck, Send, LayoutDashboard, Plus, PartyPopper
+    CheckCircle2, Loader, Clock, Search, FileCheck, Send, LayoutDashboard, Plus, PartyPopper,
+    AlertTriangle, RefreshCw
 } from 'lucide-react';
 import useScrollAnimation from '../hooks/useScrollAnimation';
 import { presaleFactoryService } from '../services/PresaleFactoryService';
@@ -34,6 +35,7 @@ const CreatePresale = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [currentBlock, setCurrentBlock] = useState(0);
     const [errors, setErrors] = useState({});
+    const [errorInfo, setErrorInfo] = useState(null);
 
     // Sync factory-deployed token addresses to local registry on mount
     useEffect(() => {
@@ -183,6 +185,30 @@ const CreatePresale = () => {
 
     const activeProgressStep = getProgressStep(loadingMessage);
 
+    /** Categorize errors into types with user-friendly guidance */
+    const categorizeError = (error) => {
+        const msg = (error.message || '').toLowerCase();
+        if (msg.includes('rejected') || msg.includes('cancelled') || msg.includes('denied')) {
+            return { category: 'rejected', guidance: 'You cancelled the transaction in your wallet. You can safely try again.' };
+        }
+        if (msg.includes('not confirmed in time') || msg.includes('timeout')) {
+            return { category: 'timeout', guidance: 'The transaction was sent but hasn\'t confirmed yet. Bitcoin blocks average ~10 minutes. Wait a few minutes and try again — the system will detect the existing approval.' };
+        }
+        if (msg.includes('insufficient tokens')) {
+            return { category: 'revert', guidance: 'Your token amount is too low for the hard cap. Required: hardCap \u00d7 tokenRate tokens. Go back and increase token amount or reduce hard cap/rate.' };
+        }
+        if (msg.includes('revert') || msg.includes('failed:') || msg.includes('error in calling')) {
+            return { category: 'revert', guidance: 'The smart contract rejected this transaction. Check your parameters (token address, caps, amounts) and try again.' };
+        }
+        if (msg.includes('opwallet not found') || msg.includes('not installed')) {
+            return { category: 'wallet', guidance: 'OP_WALLET extension is required. Install it from opnet.org and refresh the page.' };
+        }
+        if (msg.includes('network') || msg.includes('fetch') || msg.includes('rpc')) {
+            return { category: 'network', guidance: 'Network connection issue. Check your internet and try again.' };
+        }
+        return { category: 'unknown', guidance: 'An unexpected error occurred. You can try again or go back to edit your presale parameters.' };
+    };
+
     const handleSubmit = async () => {
         if (!connected) {
             toast.error('Please connect your wallet first');
@@ -191,6 +217,8 @@ const CreatePresale = () => {
 
         setLoading(true);
         setLoadingMessage('Preparing presale...');
+        setErrorInfo(null);
+
         try {
             const result = await presaleFactoryService.createPresale({
                 tokenAddress: formData.tokenAddress.trim(),
@@ -222,12 +250,19 @@ const CreatePresale = () => {
 
             setCreateResult(result);
             setCreated(true);
+            setLoading(false);
             toast.success('Presale created successfully!');
         } catch (error) {
             console.error(error);
+            const { category, guidance } = categorizeError(error);
+            setErrorInfo({
+                step: activeProgressStep,
+                message: error.message || 'Failed to create presale',
+                category,
+                guidance,
+            });
             toast.error(error.message || 'Failed to create presale');
-        } finally {
-            setLoading(false);
+            // loading stays true — progress tracker remains visible with error
         }
     };
 
@@ -259,8 +294,10 @@ const CreatePresale = () => {
         );
     }
 
-    // Loading state — multi-step progress tracker
+    // Loading state — multi-step progress tracker (with error handling)
     if (loading) {
+        const hasError = errorInfo !== null;
+
         return (
             <div className="presale-page create-presale-page page-transition">
                 <section className="page-hero">
@@ -271,28 +308,36 @@ const CreatePresale = () => {
                 <div className="presale-container narrow">
                     <div className="wizard-card">
                         <div className="deploy-loading">
-                            <h3>Creating Presale...</h3>
+                            <h3>{hasError ? 'Presale Creation Failed' : 'Creating Presale...'}</h3>
                             <p className="deploy-loading-subtitle">
-                                This requires multiple on-chain transactions. Each step must confirm on Bitcoin before the next can proceed.
+                                {hasError
+                                    ? 'An error occurred during the process. See details below.'
+                                    : 'This requires multiple on-chain transactions. Each step must confirm on Bitcoin before the next can proceed.'
+                                }
                             </p>
                         </div>
 
                         <div className="presale-progress-tracker">
                             {PROGRESS_STEPS.map((step, i) => {
                                 const StepIcon = step.icon;
-                                const isComplete = i < activeProgressStep;
-                                const isActive = i === activeProgressStep;
-                                const isPending = i > activeProgressStep;
-                                const stepClass = isComplete ? 'complete' : isActive ? 'active' : 'pending';
+                                const isErrorStep = hasError && i === errorInfo.step;
+                                const isComplete = hasError ? i < errorInfo.step : i < activeProgressStep;
+                                const isActive = hasError ? false : i === activeProgressStep;
+                                const stepClass = isErrorStep ? 'error'
+                                    : isComplete ? 'complete'
+                                    : isActive ? 'active'
+                                    : 'pending';
 
                                 return (
                                     <div key={i} className={`progress-step ${stepClass}`}>
                                         {i > 0 && (
-                                            <div className={`progress-step-line ${isComplete ? 'complete' : isActive ? 'active' : ''}`} />
+                                            <div className={`progress-step-line ${isComplete ? 'complete' : isErrorStep ? 'error' : isActive ? 'active' : ''}`} />
                                         )}
                                         <div className="progress-step-row">
                                             <div className="progress-step-icon">
-                                                {isComplete ? (
+                                                {isErrorStep ? (
+                                                    <AlertTriangle size={20} />
+                                                ) : isComplete ? (
                                                     <CheckCircle2 size={20} />
                                                 ) : isActive ? (
                                                     <Loader size={20} className="spin" />
@@ -301,8 +346,13 @@ const CreatePresale = () => {
                                                 )}
                                             </div>
                                             <div className="progress-step-content">
-                                                <div className="progress-step-label">{step.label}</div>
-                                                <div className="progress-step-desc">{step.desc}</div>
+                                                <div className="progress-step-label">
+                                                    {step.label}
+                                                    {isErrorStep && <span className="progress-step-failed-badge">Failed</span>}
+                                                </div>
+                                                <div className="progress-step-desc">
+                                                    {isErrorStep ? errorInfo.message : step.desc}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -310,7 +360,41 @@ const CreatePresale = () => {
                             })}
                         </div>
 
-                        {loadingMessage && (
+                        {/* Error guidance + actions */}
+                        {hasError && (
+                            <div className="progress-error-details">
+                                <div className="progress-error-guidance">
+                                    <AlertTriangle size={16} />
+                                    <span>{errorInfo.guidance}</span>
+                                </div>
+                                <div className="progress-error-actions">
+                                    <button
+                                        className="btn btn-primary"
+                                        onClick={() => {
+                                            setErrorInfo(null);
+                                            handleSubmit();
+                                        }}
+                                    >
+                                        <RefreshCw size={18} />
+                                        <span>Try Again</span>
+                                    </button>
+                                    <button
+                                        className="btn btn-ghost"
+                                        onClick={() => {
+                                            setErrorInfo(null);
+                                            setLoading(false);
+                                            setLoadingMessage('');
+                                        }}
+                                    >
+                                        <ArrowLeft size={18} />
+                                        <span>Edit Parameters</span>
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Live message (only when NOT in error state) */}
+                        {!hasError && loadingMessage && (
                             <div className="progress-live-message">
                                 <Loader size={14} className="spin" />
                                 <span>{loadingMessage}</span>
