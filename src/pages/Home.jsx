@@ -188,16 +188,22 @@ const Home = () => {
                         <div className="mockup-card mockup-card-front">
                             <div className="mockup-header">
                                 <div className="mockup-token-icon" />
-                                <div>
+                                <div style={{ flex: 1 }}>
                                     <div className="mockup-line short" />
                                     <div className="mockup-line tiny" />
                                 </div>
+                                <div className="mockup-status-badge">
+                                    <span className="mockup-pulse-dot" />
+                                    <span className="mockup-status-text" />
+                                </div>
                             </div>
-                            <div className="mockup-bar-track">
-                                <div className="mockup-bar-fill" />
+                            <div className="mockup-progress-row">
+                                <div className="mockup-bar-track">
+                                    <div className="mockup-bar-fill" />
+                                </div>
+                                <div className="mockup-pct" />
                             </div>
                             <div className="mockup-stats-row">
-                                <div className="mockup-stat-block" />
                                 <div className="mockup-stat-block" />
                                 <div className="mockup-stat-block" />
                             </div>

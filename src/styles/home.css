@@ -189,6 +189,23 @@
     border-radius: 50%;
     background: linear-gradient(135deg, var(--accent-orange), var(--accent-purple));
     flex-shrink: 0;
+    position: relative;
+}
+
+.mockup-token-icon::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, var(--accent-orange), var(--accent-purple), var(--accent-orange));
+    z-index: -1;
+    opacity: 0.5;
+    animation: mockupIconSpin 6s linear infinite;
+}
+
+@keyframes mockupIconSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 .mockup-line {
@@ -201,12 +218,56 @@
 .mockup-line.short { width: 60%; }
 .mockup-line.tiny { width: 35%; height: 6px; }
 
+/* Status badge */
+.mockup-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 99px;
+    background: rgba(20, 241, 149, 0.15);
+    border: 1px solid rgba(20, 241, 149, 0.2);
+    flex-shrink: 0;
+}
+
+.mockup-pulse-dot {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    box-shadow: 0 0 6px var(--accent-green);
+    animation: mockupPulse 2s ease-in-out infinite;
+}
+
+@keyframes mockupPulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--accent-green); }
+    50% { opacity: 0.4; box-shadow: 0 0 2px var(--accent-green); }
+}
+
+.mockup-status-text {
+    display: inline-block;
+    width: 24px;
+    height: 5px;
+    border-radius: 3px;
+    background: rgba(20, 241, 149, 0.4);
+}
+
+/* Progress row */
+.mockup-progress-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
 .mockup-bar-track {
+    flex: 1;
     height: 8px;
     border-radius: 4px;
     background: rgba(255, 255, 255, 0.04);
-    margin-bottom: 1rem;
-    overflow: hidden;
+    overflow: visible;
+    position: relative;
 }
 
 .mockup-bar-fill {
@@ -214,6 +275,29 @@
     height: 100%;
     border-radius: 4px;
     background: linear-gradient(90deg, var(--accent-orange), var(--accent-purple));
+    box-shadow: 0 0 10px rgba(255, 107, 0, 0.25);
+    position: relative;
+}
+
+.mockup-bar-fill::after {
+    content: '';
+    position: absolute;
+    right: -1px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 6px var(--accent-orange), 0 0 12px rgba(255, 107, 0, 0.3);
+}
+
+.mockup-pct {
+    width: 28px;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 107, 0, 0.35);
+    flex-shrink: 0;
 }
 
 .mockup-stats-row {

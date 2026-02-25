@@ -28,11 +28,18 @@ const TokenDirectory = () => {
     const loadTokens = useCallback(async () => {
         setLoading(true);
         try {
-            // Get all registered token addresses from local registry
-            const allAddresses = getAllRegisteredTokens();
-            const tokenList = [];
+            // Primary: fetch all token addresses directly from factory contract on-chain
+            let addresses = [];
+            try {
+                addresses = await factoryService.getAllDeployedTokenAddresses();
+            } catch (err) {
+                console.warn('Chain fetch failed, falling back to cache:', err.message);
+                addresses = getAllRegisteredTokens();
+            }
 
-            for (const addr of allAddresses) {
+            // Fetch metadata for each token
+            const tokenList = [];
+            for (const addr of addresses) {
                 try {
                     const info = await airdropService.fetchTokenInfo(addr);
                     tokenList.push({
@@ -52,6 +59,9 @@ const TokenDirectory = () => {
             }
 
             setTokens(tokenList);
+
+            // Background: sync to localStorage for other services that need it
+            factoryService.syncTokenRegistry().catch(() => {});
         } catch {
             setTokens([]);
         } finally {
@@ -60,13 +70,9 @@ const TokenDirectory = () => {
     }, []);
 
     const handleRefresh = async () => {
-        if (!address) {
-            toast.error('Connect wallet to sync tokens from chain');
-            return;
-        }
         setRefreshing(true);
         try {
-            await factoryService.syncTokenRegistry(address);
+            await factoryService.syncTokenRegistry(address || undefined);
             await loadTokens();
             toast.success('Token list refreshed');
         } catch {
@@ -127,6 +133,7 @@ const TokenDirectory = () => {
                         />
                     </div>
                     <button
+                        type="button"
                         className={`btn btn-secondary ${refreshing ? 'spinning' : ''}`}
                         onClick={handleRefresh}
                         disabled={refreshing}
