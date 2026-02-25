@@ -162,7 +162,7 @@ const TokenDirectory = () => {
                         size="md"
                     />
                 ) : (
-                    <div className="token-grid animate-on-scroll">
+                    <div className="token-grid">
                         {filteredTokens.map((token, i) => (
                             <div key={token.address || i} className="token-dir-card">
                                 <div className="token-dir-header">
