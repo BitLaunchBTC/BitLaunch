@@ -69,11 +69,12 @@ export async function approveAndWait({
         return false;
     }
 
-    // 2. Simulate & send approve
+    // 2. Simulate & send increaseAllowance (OPNet uses increaseAllowance, not approve)
     onProgress?.('Approving token transfer — please confirm in wallet...');
     const token = getContract(tokenAddr, OP_20_ABI, provider, network, owner);
 
-    const approveSimulation = await token.approve(spender, amount);
+    const delta = amount - currentAllowance;
+    const approveSimulation = await token.increaseAllowance(spender, delta);
     if (approveSimulation.revert) {
         throw new Error(`Token approval failed: ${approveSimulation.revert}`);
     }
