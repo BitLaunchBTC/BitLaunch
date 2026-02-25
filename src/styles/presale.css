@@ -541,6 +541,16 @@
     margin-top: 2px;
 }
 
+.info-banner.warning {
+    background: rgba(255, 59, 48, 0.08);
+    border-color: rgba(255, 59, 48, 0.2);
+    color: #ff6b6b;
+}
+
+.info-banner.warning svg {
+    color: #ff6b6b;
+}
+
 /* V2: Status messages */
 .status-message {
     display: flex;

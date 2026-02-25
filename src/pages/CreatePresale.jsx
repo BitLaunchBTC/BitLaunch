@@ -99,6 +99,16 @@ const CreatePresale = () => {
             if (formData.minBuy && formData.maxBuy && parseFloat(formData.minBuy) > parseFloat(formData.maxBuy)) {
                 newErrors.minBuy = 'Min buy cannot exceed max buy';
             }
+            // Cross-field: tokenAmount must cover hardCap × tokenRate
+            const hc = parseFloat(formData.hardCap || 0);
+            const rate = parseFloat(formData.tokenRate || 0);
+            const amt = parseFloat(formData.tokenAmount || 0);
+            if (hc > 0 && rate > 0 && amt > 0) {
+                const tokensNeeded = hc * rate;
+                if (amt < tokensNeeded) {
+                    newErrors.hardCap = `Requires ${tokensNeeded.toLocaleString()} tokens (hard cap × rate) but you allocated ${amt.toLocaleString()}. Reduce hard cap or go back and increase token amount.`;
+                }
+            }
         }
 
         if (step === 2) {
@@ -579,7 +589,12 @@ const CreatePresale = () => {
                                         onChange={handleChange}
                                         min="1"
                                     />
-                                    <div className="form-hint">Maximum total raise</div>
+                                    <div className="form-hint">
+                                        Maximum total raise
+                                        {parseFloat(formData.tokenRate) > 0 && parseFloat(formData.tokenAmount) > 0 && (
+                                            <> · Max with your tokens: <strong>{Math.floor(parseFloat(formData.tokenAmount) / parseFloat(formData.tokenRate)).toLocaleString()} sats</strong></>
+                                        )}
+                                    </div>
                                     {errors.hardCap && <div className="form-error">{errors.hardCap}</div>}
                                 </div>
                             </div>
@@ -754,6 +769,26 @@ const CreatePresale = () => {
                                     <span>2% of raised funds (on finalize)</span>
                                 </div>
                             </div>
+
+                            {/* Final cross-check: token sufficiency */}
+                            {(() => {
+                                const hc = parseFloat(formData.hardCap || 0);
+                                const rate = parseFloat(formData.tokenRate || 0);
+                                const amt = parseFloat(formData.tokenAmount || 0);
+                                if (hc > 0 && rate > 0 && amt > 0 && amt < hc * rate) {
+                                    return (
+                                        <div className="info-banner warning" style={{ marginTop: 'var(--spacing-lg)' }}>
+                                            <Shield size={16} />
+                                            <span>
+                                                <strong>Token shortage:</strong> Hard cap requires {(hc * rate).toLocaleString()} tokens
+                                                but you allocated {amt.toLocaleString()}. This will fail on-chain.
+                                                Go back and increase token amount or reduce hard cap.
+                                            </span>
+                                        </div>
+                                    );
+                                }
+                                return null;
+                            })()}
                         </>
                     )}
 
