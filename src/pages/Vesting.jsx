@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useWallet } from '../contexts/WalletContext';
 import { useToast } from '../components/Toast';
 import { vestingService } from '../services/VestingService';
+import { factoryService } from '../services/FactoryService';
 import { recordTransaction, TX_TYPES } from '../services/txHistory';
 import { opnetProvider } from '../services/opnetProvider';
 import { blocksToHumanTime } from '../services/blockTime';
@@ -65,6 +66,7 @@ const Vesting = () => {
     }, [address, fetchCurrentBlock]);
 
     useEffect(() => {
+        factoryService.syncTokenRegistry().catch(() => {});
         loadSchedules();
     }, [loadSchedules]);
 
@@ -252,10 +254,11 @@ const Vesting = () => {
                                     type="text"
                                     name="tokenAddress"
                                     className="form-input"
-                                    placeholder="opt1sq... or opr1sq..."
+                                    placeholder="0x... hex (preferred) or opt1sq... bech32"
                                     value={formData.tokenAddress}
                                     onChange={handleFormChange}
                                 />
+                                <p className="form-hint">💡 Paste the <strong>0x hex address</strong> shown on the Token Factory deploy page for best compatibility.</p>
                             </div>
 
                             <div className="form-group">

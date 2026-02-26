@@ -52,10 +52,18 @@ class FactoryDeploymentService {
 
             const decimalsMultiplier = BigInt(10 ** params.decimals);
             const maxSupply = BigInt(params.totalSupply) * decimalsMultiplier;
-            const initialMintAmount = params.preMintAmount
-                ? BigInt(params.preMintAmount) * decimalsMultiplier
-                : maxSupply;
             const freeMintSupply = BigInt(params.freeMintSupply || 0) * decimalsMultiplier;
+
+            // Default preMint: if user didn't set one, mint (maxSupply - freeMint)
+            // so the two never exceed maxSupply together
+            let initialMintAmount;
+            if (params.preMintAmount) {
+                initialMintAmount = BigInt(params.preMintAmount) * decimalsMultiplier;
+            } else if (freeMintSupply > 0n) {
+                initialMintAmount = maxSupply - freeMintSupply;
+            } else {
+                initialMintAmount = maxSupply;
+            }
             const freeMintPerTx = BigInt(params.freeMintPerTx || 0) * decimalsMultiplier;
             const freeMintUserCap = BigInt(params.freeMintUserCap || 0) * decimalsMultiplier;
             const burnEnabled = params.burnEnabled || false;
@@ -129,9 +137,10 @@ class FactoryDeploymentService {
                 }
             }
 
+            let tokenAddrHex = null;
             if (tokenAddress) {
                 try {
-                    const tokenAddrHex = tokenAddress.toHex ? tokenAddress.toHex() : null;
+                    tokenAddrHex = tokenAddress.toHex ? tokenAddress.toHex() : null;
                     const tokenAddrStr = typeof tokenAddress === 'string'
                         ? tokenAddress
                         : tokenAddress.p2op
@@ -183,6 +192,7 @@ class FactoryDeploymentService {
                     success: true,
                     txHash: null,
                     tokenAddress: tokenAddress ? tokenAddress.toString() : null,
+                    tokenHex: tokenAddrHex,
                     params,
                     warning: `Transaction may have been sent but could not be verified: ${sendError.message}`,
                 };
@@ -192,6 +202,7 @@ class FactoryDeploymentService {
                 success: true,
                 txHash,
                 tokenAddress: tokenAddress ? tokenAddress.toString() : null,
+                tokenHex: tokenAddrHex,
                 params,
             };
 

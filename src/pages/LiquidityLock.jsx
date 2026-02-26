@@ -267,7 +267,7 @@ const LiquidityLock = () => {
                         <input
                             type="text"
                             className="pair-search-input"
-                            placeholder="Enter token or LP token address..."
+                            placeholder="0x... hex (preferred) or opt1sq... bech32"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}

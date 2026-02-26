@@ -139,6 +139,14 @@ const LaunchToken = () => {
             if (formData.freeMintPerTx && !formData.freeMintSupply) {
                 newErrors.freeMintSupply = 'Required when free mint per TX is set';
             }
+            // Combined check: preMint + freeMint must not exceed total supply
+            if (formData.freeMintSupply && !newErrors.freeMintSupply) {
+                const preMint = parseFloat(formData.preMintAmount || 0);
+                const freeMint = parseFloat(formData.freeMintSupply);
+                if (preMint + freeMint > supply) {
+                    newErrors.freeMintSupply = `Pre-mint (${preMint}) + free mint (${freeMint}) exceeds total supply (${supply})`;
+                }
+            }
         }
 
         setErrors(newErrors);
@@ -170,15 +178,27 @@ const LaunchToken = () => {
 
         setDeploying(true);
         try {
+            const totalSupplyNum = parseFloat(formData.totalSupply);
+            const freeMintNum = formData.freeMintSupply ? parseFloat(formData.freeMintSupply) : 0;
+            const preMintNum = formData.preMintAmount
+                ? parseFloat(formData.preMintAmount)
+                : 0;
+
+            // Final safety check before deploy
+            const effectivePreMint = preMintNum || (totalSupplyNum - freeMintNum);
+            if (effectivePreMint + freeMintNum > totalSupplyNum) {
+                toast.error(`Pre-mint (${effectivePreMint}) + free mint (${freeMintNum}) exceeds total supply (${totalSupplyNum})`);
+                setDeploying(false);
+                return;
+            }
+
             const params = {
                 name: formData.name.trim(),
                 symbol: formData.symbol.toUpperCase().trim(),
-                totalSupply: parseFloat(formData.totalSupply),
+                totalSupply: totalSupplyNum,
                 decimals: parseInt(formData.decimals),
-                preMintAmount: formData.preMintAmount
-                    ? parseFloat(formData.preMintAmount)
-                    : parseFloat(formData.totalSupply),
-                freeMintSupply: formData.freeMintSupply ? parseFloat(formData.freeMintSupply) : 0,
+                preMintAmount: preMintNum || null,
+                freeMintSupply: freeMintNum,
                 freeMintPerTx: formData.freeMintPerTx ? parseFloat(formData.freeMintPerTx) : 0,
                 freeMintUserCap: formData.freeMintUserCap ? parseFloat(formData.freeMintUserCap) : 0,
                 burnEnabled: formData.burnEnabled,
@@ -346,6 +366,25 @@ const LaunchToken = () => {
                                         copyable={true}
                                     />
                                 </div>
+                            </div>
+                        )}
+
+                        {deployResult.tokenHex && (
+                            <div className="deploy-address-card">
+                                <div className="deploy-address-header">
+                                    <span className="deploy-address-label">0x Hex Address</span>
+                                    <span className="deploy-address-badge" style={{background:'var(--accent-secondary,#6366f1)'}}>Use in Vesting / Presale / Lock</span>
+                                </div>
+                                <div className="deploy-address-value">
+                                    <AddressDisplay
+                                        address={deployResult.tokenHex}
+                                        truncate={false}
+                                        copyable={true}
+                                    />
+                                </div>
+                                <p style={{fontSize:'0.72rem',color:'var(--text-muted)',marginTop:'6px',marginBottom:0}}>
+                                    💡 Paste this <strong>0x hex address</strong> into Vesting, Presale, or Lock forms for guaranteed compatibility with factory-deployed tokens.
+                                </p>
                             </div>
                         )}
 

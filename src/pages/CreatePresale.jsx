@@ -114,24 +114,38 @@ const CreatePresale = () => {
             if (!formData.tokenAddress.trim()) newErrors.tokenAddress = 'Token address is required';
             if (!formData.tokenRate || parseFloat(formData.tokenRate) <= 0) {
                 newErrors.tokenRate = 'Token rate must be greater than 0';
+            } else if (!Number.isInteger(Number(formData.tokenRate))) {
+                newErrors.tokenRate = 'Token rate must be a whole number';
             }
             if (!formData.tokenAmount || parseFloat(formData.tokenAmount) <= 0) {
                 newErrors.tokenAmount = 'Token amount must be greater than 0';
+            } else if (!Number.isInteger(Number(formData.tokenAmount))) {
+                newErrors.tokenAmount = 'Token amount must be a whole number (base units)';
             }
         }
 
         if (step === 1) {
             if (!formData.softCap || parseFloat(formData.softCap) <= 0) {
                 newErrors.softCap = 'Soft cap must be greater than 0';
+            } else if (!Number.isInteger(Number(formData.softCap))) {
+                newErrors.softCap = 'Soft cap must be a whole number (satoshis)';
             }
             if (!formData.hardCap || parseFloat(formData.hardCap) <= 0) {
                 newErrors.hardCap = 'Hard cap must be greater than 0';
+            } else if (!Number.isInteger(Number(formData.hardCap))) {
+                newErrors.hardCap = 'Hard cap must be a whole number (satoshis)';
             }
             if (formData.softCap && formData.hardCap && parseFloat(formData.softCap) > parseFloat(formData.hardCap)) {
                 newErrors.softCap = 'Soft cap cannot exceed hard cap';
             }
             if (formData.minBuy && formData.maxBuy && parseFloat(formData.minBuy) > parseFloat(formData.maxBuy)) {
                 newErrors.minBuy = 'Min buy cannot exceed max buy';
+            }
+            if (formData.minBuy && !Number.isInteger(Number(formData.minBuy))) {
+                newErrors.minBuy = 'Min buy must be a whole number (satoshis)';
+            }
+            if (formData.maxBuy && !Number.isInteger(Number(formData.maxBuy))) {
+                newErrors.maxBuy = 'Max buy must be a whole number (satoshis)';
             }
             // Cross-field: tokenAmount must cover hardCap × tokenRate
             const hc = parseFloat(formData.hardCap || 0);
@@ -658,11 +672,12 @@ const CreatePresale = () => {
                                     type="text"
                                     name="tokenAddress"
                                     className={`form-input ${errors.tokenAddress ? 'error' : ''}`}
-                                    placeholder="opt1sq... or opr1sq... token contract address"
+                                    placeholder="0x... hex (preferred) or opt1sq... bech32"
                                     value={formData.tokenAddress}
                                     onChange={handleChange}
                                 />
                                 {errors.tokenAddress && <div className="form-error">{errors.tokenAddress}</div>}
+                                <p className="form-hint">💡 Paste the <strong>0x hex address</strong> from the Token Factory deploy page for best compatibility.</p>
                             </div>
 
                             <div className="grid-2">
@@ -676,6 +691,7 @@ const CreatePresale = () => {
                                         value={formData.tokenRate}
                                         onChange={handleChange}
                                         min="1"
+                                        step="1"
                                     />
                                     <div className="form-hint">Tokens per 1 satoshi contributed</div>
                                     {errors.tokenRate && <div className="form-error">{errors.tokenRate}</div>}
@@ -690,6 +706,7 @@ const CreatePresale = () => {
                                         value={formData.tokenAmount}
                                         onChange={handleChange}
                                         min="1"
+                                        step="1"
                                     />
                                     <div className="form-hint">Total tokens deposited into the presale</div>
                                     {errors.tokenAmount && <div className="form-error">{errors.tokenAmount}</div>}
@@ -725,6 +742,7 @@ const CreatePresale = () => {
                                         value={formData.softCap}
                                         onChange={handleChange}
                                         min="1"
+                                        step="1"
                                     />
                                     <div className="form-hint">Minimum raise for presale to succeed</div>
                                     {errors.softCap && <div className="form-error">{errors.softCap}</div>}
@@ -739,6 +757,7 @@ const CreatePresale = () => {
                                         value={formData.hardCap}
                                         onChange={handleChange}
                                         min="1"
+                                        step="1"
                                     />
                                     <div className="form-hint">
                                         Maximum total raise
@@ -761,6 +780,7 @@ const CreatePresale = () => {
                                         value={formData.minBuy}
                                         onChange={handleChange}
                                         min="0"
+                                        step="1"
                                     />
                                     {errors.minBuy && <div className="form-error">{errors.minBuy}</div>}
                                 </div>
@@ -774,6 +794,7 @@ const CreatePresale = () => {
                                         value={formData.maxBuy}
                                         onChange={handleChange}
                                         min="0"
+                                        step="1"
                                     />
                                 </div>
                             </div>
@@ -1019,6 +1040,7 @@ const CreatePresale = () => {
                                                 value={formData.antiBotMaxPerBlock}
                                                 onChange={handleChange}
                                                 min="1"
+                                                step="1"
                                             />
                                             <div className="form-hint">
                                                 Only this many wallets can contribute in a single block (~10 min window)

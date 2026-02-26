@@ -65,20 +65,25 @@ export const presaleFactoryService = {
         const network = opnetProvider.getNetwork();
 
         const tokenAddr = await resolveAddress(data.tokenAddress, true);
-        const hardCap = BigInt(data.hardCap);
-        const softCap = BigInt(data.softCap || '0');
-        const rate = BigInt(data.tokenRate);
-        const minBuy = BigInt(data.minBuy || '100000');
-        const maxBuy = BigInt(data.maxBuy || '10000000');
-        const startBlock = BigInt(data.startBlock);
-        const endBlock = BigInt(data.endBlock);
-        const tokenAmount = BigInt(data.tokenAmount);
+
+        // All contract params are u256 (integer). Wrap with Math.round() to
+        // safely handle any floating-point residue from form inputs.
+        const toInt = (v, fallback = '0') => BigInt(Math.round(Number(v || fallback)));
+
+        const hardCap = toInt(data.hardCap);
+        const softCap = toInt(data.softCap);
+        const rate = toInt(data.tokenRate);
+        const minBuy = toInt(data.minBuy, '100000');
+        const maxBuy = toInt(data.maxBuy, '10000000');
+        const startBlock = toInt(data.startBlock);
+        const endBlock = toInt(data.endBlock);
+        const tokenAmount = toInt(data.tokenAmount);
 
         // V3: Vesting + anti-bot params (default to 0 = disabled)
-        const vestingCliff = BigInt(data.vestingCliff || '0');
-        const vestingDuration = BigInt(data.vestingDuration || '0');
-        const vestingTgeBps = BigInt(data.vestingTgeBps || '0');
-        const antiBotMaxPerBlock = BigInt(data.antiBotMaxPerBlock || '0');
+        const vestingCliff = toInt(data.vestingCliff);
+        const vestingDuration = toInt(data.vestingDuration);
+        const vestingTgeBps = toInt(data.vestingTgeBps);
+        const antiBotMaxPerBlock = toInt(data.antiBotMaxPerBlock);
 
         const creatorAddr = await resolveAddress(data.creator, false);
         const factoryAddr = await resolveAddress(CONTRACTS.presaleFactory, true);
